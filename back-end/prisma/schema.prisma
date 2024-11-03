@@ -1,0 +1,76 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id          Int          @id @default(autoincrement())
+  email       String       @unique
+  password    String
+  role        Role         @default(USER)
+  assignments Assignment[]
+  progresses   Progress[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Flashcard {
+  id          Int          @id @default(autoincrement())
+  question    String
+  answer      String
+  categoryId  Int?
+  category    Category?    @relation(fields: [categoryId], references: [id])
+  assignments Assignment[]
+  progresses   Progress[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Assignment {
+  id          Int        @id @default(autoincrement())
+  userId      Int
+  flashcardId Int
+  assignedAt  DateTime   @default(now())
+
+  user        User       @relation(fields: [userId], references: [id])
+  flashcard   Flashcard  @relation(fields: [flashcardId], references: [id])
+
+  @@unique([userId, flashcardId])
+}
+
+model Category {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  description String?
+
+  flashcards  Flashcard[]
+}
+
+model Progress {
+  id            Int       @id @default(autoincrement())
+  userId        Int
+  flashcardId   Int
+  status        Status    @default(NOT_STARTED)
+  lastReviewed  DateTime?
+  timesReviewed Int       @default(0)
+
+  user          User      @relation(fields: [userId], references: [id])
+  flashcard     Flashcard @relation(fields: [flashcardId], references: [id])
+
+  @@unique([userId, flashcardId])
+}
+
+enum Status {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
