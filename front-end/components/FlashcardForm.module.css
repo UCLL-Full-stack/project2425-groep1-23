@@ -1,6 +1,8 @@
 .formContainer {
     max-width: 500px;
     margin: 0 auto;
+    background-color: var(--background-color);
+    color: var(--text-color);
   }
   
   .formGroup {
@@ -18,17 +20,20 @@
     width: 100%;
     padding: 0.5rem;
     box-sizing: border-box;
+    background-color: var(--background-color);
+    color: var(--primary-color);
+    border: 1px solid var(--secondary-color);
   }
   
   .button {
     padding: 0.75rem 1.5rem;
-    background-color: #0070f3;
-    color: #fff;
+    background-color: var(--primary-color);
+    color: var(--text-color);
     border: none;
     cursor: pointer;
   }
   
   .button:hover {
-    background-color: #005bb5;
+    background-color: var(--secondary-color);
   }
   

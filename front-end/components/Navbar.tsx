@@ -5,6 +5,9 @@ import styles from '../styles/Navbar.module.css';
 const Navbar: FC = () => {
   return (
     <nav className={styles.navbar}>
+      <Link href="/" legacyBehavior>
+        <a className={styles.siteName}>FlashcardApp</a>
+      </Link>
       <ul className={styles.navList}>
         <li className={styles.navItem}>
           <Link href="/" className={styles.navLink}>

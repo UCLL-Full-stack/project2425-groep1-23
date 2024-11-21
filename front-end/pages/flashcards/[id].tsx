@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { getFlashcardById } from '../../services/flashcardService';
 import { Flashcard } from '../../types';
 import FlipCard from '../../components/FlipCard';
+import styles from '../../styles/FlashCardDetail.module.css'
 
 const FlashcardDetailPage = () => {
   const router = useRouter();
@@ -34,7 +35,7 @@ const FlashcardDetailPage = () => {
   }
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1>Flashcard Detail</h1>
       <FlipCard question={flashcard.question} answer={flashcard.answer} />
     </div>
