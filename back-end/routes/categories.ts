@@ -1,5 +1,7 @@
 import express from 'express';
-import prisma from '../prismaClient';
+import prisma from '../repository/prisma/prismaClient';
+
+import { getCategories } from '../controller/categoriesController';
 
 const router = express.Router();
 
@@ -13,5 +15,8 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch categories' });
   }
 });
+
+// GET /categories
+router.get('/', getCategories);
 
 export default router;

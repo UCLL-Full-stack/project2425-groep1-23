@@ -1,5 +1,5 @@
 import { PrismaClient, User, Flashcard, Assignment, Category, Progress, Role, Status } from '@prisma/client';
-import prisma from './prismaClient';
+import prisma from './repository/prisma/prismaClient';
 
 async function main() {
   // Create a new user

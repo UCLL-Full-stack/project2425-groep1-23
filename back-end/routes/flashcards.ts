@@ -1,5 +1,10 @@
 import express from 'express';
-import prisma from '../prismaClient';
+import prisma from '../repository/prisma/prismaClient';
+
+import {
+  getFlashcards,
+  createFlashcard,
+} from '../controller/flashcardsController';
 
 const router = express.Router();
 
@@ -43,6 +48,12 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch flashcard' });
   }
 });
+
+// GET /flashcards
+router.get('/', getFlashcards);
+
+// POST /flashcards
+router.post('/', createFlashcard);
 
 
 export default router;

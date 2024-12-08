@@ -12,6 +12,8 @@ generator client {
 enum Role {
   USER
   ADMIN
+  STUDENT
+  TEACHER
 }
 
 enum Status {
