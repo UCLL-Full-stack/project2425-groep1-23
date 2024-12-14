@@ -3,4 +3,6 @@
   flex-direction: column;
   gap: 16px;
   padding: 40px;
+  background-color: var(--background-color);
+  color: var(--primary-color);
 }

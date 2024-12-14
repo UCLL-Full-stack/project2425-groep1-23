@@ -1,0 +1,33 @@
+.navbar {
+  background-color: var(--navbar-color);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.siteName {
+  color: var(--text-color);
+  font-size: 1.5rem;
+}
+
+.navList {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.navItem {
+  margin-left: 1rem;
+}
+
+.navLink {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.navLink:hover {
+  text-decoration: underline;
+}

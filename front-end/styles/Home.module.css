@@ -1,10 +1,4 @@
 .page {
-  --gray-rgb: 0, 0, 0;
-  --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
-  --gray-alpha-100: rgba(var(--gray-rgb), 0.05);
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
 
   display: grid;
   grid-template-rows: 20px 1fr 20px;
@@ -16,22 +10,62 @@
   font-family: var(--font-geist-sans);
 }
 
-@media (prefers-color-scheme: dark) {
-  .page {
-    --gray-rgb: 255, 255, 255;
-    --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
-    --gray-alpha-100: rgba(var(--gray-rgb), 0.06);
+.content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 1rem;
+  padding: 1rem;
+  align-items: center
+;}
 
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-  }
+.text-section {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1rem;
+  padding: 2rem;
+}
+
+
+.image {
+  max-width: 50%;
+  border-radius: .5rem;
+}
+
+.button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--primary-color);
+  color: black;
+  border: none;
+  border-radius: .5rem; 
+  text-align: center;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: var(--secondary-color);
 }
 
 .main {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 32px;
-  grid-row-start: 2;
+  width: 70%;
+  padding:0;
+  margin: 3.5rem auto;
+}
+
+.box {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--navbar-color);
+  margin-right: 2rem;
 }
 
 .main ol {
@@ -50,7 +84,7 @@
 
 .main code {
   font-family: inherit;
-  background: var(--gray-alpha-100);
+  background: var(--text-color);
   padding: 2px 4px;
   border-radius: 4px;
   font-weight: 600;
@@ -82,13 +116,13 @@
 }
 
 a.primary {
-  background: var(--foreground);
-  color: var(--background);
+  background: var(--primary-color);
+  color: var(--background-color);
   gap: 8px;
 }
 
 a.secondary {
-  border-color: var(--gray-alpha-200);
+  border-color: var(--secondary-color);
   min-width: 180px;
 }
 
@@ -111,12 +145,12 @@ a.secondary {
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
   a.primary:hover {
-    background: var(--button-primary-hover);
+    background: var(--accent-color);
     border-color: transparent;
   }
 
   a.secondary:hover {
-    background: var(--button-secondary-hover);
+    background: var(--accent-color);
     border-color: transparent;
   }
 
@@ -161,8 +195,3 @@ a.secondary {
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
-  }
-}

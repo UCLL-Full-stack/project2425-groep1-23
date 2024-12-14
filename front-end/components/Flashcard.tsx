@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import Link from 'next/link';
-import { Flashcard } from '../services/types';
+import { Flashcard } from '../types';
 import styles from '../styles/Flashcard.module.css';  
 
 interface FlashcardProps {

@@ -1,3 +1,5 @@
+// prisma/schema.prisma
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -10,6 +12,14 @@ generator client {
 enum Role {
   USER
   ADMIN
+  STUDENT
+  TEACHER
+}
+
+enum Status {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
 }
 
 model User {
@@ -18,7 +28,7 @@ model User {
   password    String
   role        Role         @default(USER)
   assignments Assignment[]
-  progresses   Progress[]
+  progresses  Progress[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 }
@@ -30,7 +40,7 @@ model Flashcard {
   categoryId  Int?
   category    Category?    @relation(fields: [categoryId], references: [id])
   assignments Assignment[]
-  progresses   Progress[]
+  progresses  Progress[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 }
@@ -67,10 +77,4 @@ model Progress {
   flashcard     Flashcard @relation(fields: [flashcardId], references: [id])
 
   @@unique([userId, flashcardId])
-}
-
-enum Status {
-  NOT_STARTED
-  IN_PROGRESS
-  COMPLETED
 }

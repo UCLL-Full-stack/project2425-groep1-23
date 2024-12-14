@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import FlashcardComponent from './Flashcard';
-import { Flashcard } from '../services/types';
+import { Flashcard } from '../types';
 import styles from '../styles/FlashcardList.module.css';
 
 interface FlashcardListProps {
