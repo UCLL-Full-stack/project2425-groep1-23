@@ -1,59 +1,145 @@
-import express from 'express';
-import prisma from '../repository/prisma/prismaClient';
+// src/routes/flashcardsRoutes.ts
 
-import {
-  getFlashcards,
-  createFlashcard,
-} from '../controller/flashcardsController';
+import express from 'express';
+import * as flashcardsController from '../controller/flashcardsController';
+import { validateFlashcardCreation, validateFlashcardUpdate } from '../middleware/validation/flashcardsValidation';
+import { validateRequest } from '../middleware/validateRequest';
+import { param } from 'express-validator';
 
 const router = express.Router();
 
-// Existing GET endpoints...
+/**
+ * @swagger
+ * tags:
+ *   name: Flashcards
+ *   description: API endpoints for managing flashcards
+ */
 
-// POST /flashcards - Create a new flashcard
-router.post('/', async (req, res) => {
-  const { question, answer, categoryId } = req.body;
+/**
+ * @swagger
+ * /flashcards:
+ *   get:
+ *     summary: Retrieve a list of flashcards
+ *     tags: [Flashcards]
+ *     responses:
+ *       200:
+ *         description: A list of flashcards.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Flashcard'
+ *       500:
+ *         description: Failed to fetch flashcards.
+ *   post:
+ *     summary: Create a new flashcard
+ *     tags: [Flashcards]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/NewFlashcard'
+ *     responses:
+ *       201:
+ *         description: Flashcard created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Flashcard'
+ *       400:
+ *         description: Failed to create flashcard.
+ */
+router.get('/', flashcardsController.getFlashcards);
 
-  try {
-    const newFlashcard = await prisma.flashcard.create({
-      data: {
-        question,
-        answer,
-        categoryId: categoryId || null,
-      },
-    });
-    res.status(201).json(newFlashcard);
-  } catch (error) {
-    console.error('Error creating flashcard:', error);
-    res.status(400).json({ error: 'Failed to create flashcard' });
-  }
-});
+router.post('/', validateFlashcardCreation, validateRequest, flashcardsController.createFlashcard);
 
-// GET /flashcards/:id - Get a flashcard by ID
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
+/**
+ * @swagger
+ * /flashcards/{id}:
+ *   get:
+ *     summary: Retrieve a single flashcard by ID
+ *     tags: [Flashcards]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Numeric ID of the flashcard to retrieve.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Flashcard found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Flashcard'
+ *       404:
+ *         description: Flashcard not found.
+ *       500:
+ *         description: Failed to fetch flashcard.
+ *   put:
+ *     summary: Update an existing flashcard
+ *     tags: [Flashcards]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Numeric ID of the flashcard to update.
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateFlashcard'
+ *     responses:
+ *       200:
+ *         description: Flashcard updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Flashcard'
+ *       400:
+ *         description: Failed to update flashcard.
+ *       404:
+ *         description: Flashcard not found.
+ *   delete:
+ *     summary: Delete a flashcard by ID
+ *     tags: [Flashcards]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Numeric ID of the flashcard to delete.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Flashcard deleted successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Flashcard'
+ *       404:
+ *         description: Flashcard not found.
+ *       500:
+ *         description: Failed to delete flashcard.
+ */
+router.get('/:id', 
+  param('id').isInt().withMessage('ID must be an integer'), 
+  validateRequest, 
+  flashcardsController.getFlashcardById
+);
 
-  try {
-    const flashcard = await prisma.flashcard.findUnique({
-      where: { id: Number(id) },
-    });
+router.put('/:id', validateFlashcardUpdate, validateRequest, flashcardsController.updateFlashcard);
 
-    if (flashcard) {
-      res.json(flashcard);
-    } else {
-      res.status(404).json({ error: 'Flashcard not found' });
-    }
-  } catch (error) {
-    console.error('Error fetching flashcard:', error);
-    res.status(500).json({ error: 'Failed to fetch flashcard' });
-  }
-});
-
-// GET /flashcards
-router.get('/', getFlashcards);
-
-// POST /flashcards
-router.post('/', createFlashcard);
-
+router.delete('/:id', 
+  param('id').isInt().withMessage('ID must be an integer'), 
+  validateRequest, 
+  flashcardsController.deleteFlashcard
+);
 
 export default router;
