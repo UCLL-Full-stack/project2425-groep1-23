@@ -18,3 +18,9 @@ export interface Flashcard {
     name: string;
     description?: string;
   }
+
+
+  export type StatusMessage = {
+    message: string;
+    type: "error" | "success";
+};

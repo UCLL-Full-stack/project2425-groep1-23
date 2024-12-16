@@ -1,4 +1,4 @@
-import prisma from '../repository/prisma/prismaClient';
+import prisma from '../util/database';
 import { Category, Prisma } from '@prisma/client';
 
 /**

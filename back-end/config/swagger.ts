@@ -1,5 +1,3 @@
-// src/config/swagger.ts
-
 import swaggerJSDoc from 'swagger-jsdoc';
 import path from 'path';
 
@@ -17,6 +15,13 @@ const options: swaggerJSDoc.Options = {
       },
     ],
     components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
       schemas: {
         User: {
           type: 'object',
@@ -93,6 +98,37 @@ const options: swaggerJSDoc.Options = {
               type: 'string',
               enum: ['USER', 'ADMIN', 'STUDENT', 'TEACHER'],
               description: 'The user\'s new role',
+            },
+          },
+        },
+        AuthenticationRequest: {
+          type: 'object',
+          required: ['email', 'password'],
+          properties: {
+            email: {
+              type: 'string',
+              description: 'The user\'s email',
+            },
+            password: {
+              type: 'string',
+              description: 'The user\'s password',
+            },
+          },
+        },
+        AuthenticationResponse: {
+          type: 'object',
+          properties: {
+            token: {
+              type: 'string',
+              description: 'JWT token',
+            },
+            username: {
+              type: 'string',
+              description: 'The user\'s email',
+            },
+            fullname: {
+              type: 'string',
+              description: 'The user\'s full name',
             },
           },
         },
@@ -313,13 +349,6 @@ const options: swaggerJSDoc.Options = {
               $ref: '#/components/schemas/Flashcard',
             },
           },
-        },
-      },
-      securitySchemes: {
-        BearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
         },
       },
     },
