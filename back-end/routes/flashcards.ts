@@ -1,5 +1,3 @@
-// src/routes/flashcardsRoutes.ts
-
 import express from 'express';
 import * as flashcardsController from '../controller/flashcardsController';
 import { validateFlashcardCreation, validateFlashcardUpdate } from '../middleware/validation/flashcardsValidation';

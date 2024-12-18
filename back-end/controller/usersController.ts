@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { User as PrismaUser } from '@prisma/client';
 import * as userService from '../service/userService';
+import { AuthorizationError, ValidationError } from '../errors';
 
 /**
  * @swagger
@@ -210,3 +211,67 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
       res.status(500).json({ error: 'Failed to delete user' });
     }
   };
+
+/**
+ * @swagger
+ * /users/{id}/role:
+ *   patch:
+ *     summary: Update a user's role
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Numeric ID of the user whose role is to be updated.
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               role:
+ *                 type: string
+ *                 enum: [USER, ADMIN, STUDENT, TEACHER]
+ *             required:
+ *               - role
+ *     responses:
+ *       200:
+ *         description: User role updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Invalid role provided.
+ *       404:
+ *         description: User not found.
+ *       403:
+ *         description: Unauthorized to change user roles.
+ *       500:
+ *         description: Failed to update user role.
+ */
+export const updateUserRole = async (req: Request, res: Response, next: NextFunction) => {
+  const id = parseInt(req.params.id);
+  const { role } = req.body;
+
+  try {
+      const updatedUser: Omit<PrismaUser, 'password'> | null = await userService.updateUserRole(id, role);
+      if (updatedUser) {
+          res.json(updatedUser);
+      } else {
+          res.status(404).json({ error: 'User not found' });
+      }
+  } catch (error: any) {
+      console.error(`Error updating role for user with id ${id}:`, error);
+      if (error instanceof AuthorizationError) { // Assuming you have a custom error
+          res.status(403).json({ error: 'Unauthorized to change user roles' });
+      } else if (error instanceof ValidationError) { // Assuming you have a custom error
+          res.status(400).json({ error: error.message });
+      } else {
+          res.status(500).json({ error: 'Failed to update user role' });
+      }
+  }
+};

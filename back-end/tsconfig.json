@@ -5,6 +5,15 @@
         "rootDir": "./",
         "outDir": "./dist",
         "strict": true,
-        "esModuleInterop": true
-    }
+        "esModuleInterop": true,
+        "typeRoots": [
+            "./types",
+            "./node_modules/@types"
+        ],
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true
+    },
+    "include": [
+        "./**/*"
+    ]
 }

@@ -1,6 +1,7 @@
 import prisma from '../repository/prisma/prismaClient';
-import { User, Prisma } from '@prisma/client';
+import { User, Prisma, Role } from '@prisma/client';
 import bcrypt from 'bcrypt';
+import { AuthorizationError, ValidationError } from '../errors';
 
 export const getAllUsers = async (): Promise<Omit<User, 'password'>[]> => {
     const users = await prisma.user.findMany({
@@ -79,4 +80,35 @@ export const getAllUsers = async (): Promise<Omit<User, 'password'>[]> => {
     }
     return null;
   };
+
+  /**
+ * Updates a user's role.
+ * @param id - The ID of the user to update.
+ * @param role - The new role to assign.
+ * @returns The updated user without the password, or null if not found.
+ */
+  export const updateUserRole = async (id: number, role: Role): Promise<Omit<User, 'password'> | null> => {
+    if (!Object.values(Role).includes(role)) {
+        throw new ValidationError(`Role must be one of: ${Object.values(Role).join(', ')}`);
+    }
+
+    try {
+        const user = await prisma.user.update({
+            where: { id },
+            data: { role },
+            include: {
+                assignments: true,
+                progresses: true,
+            },
+        });
+
+        const { password, ...rest } = user;
+        return rest;
+    } catch (error: any) {
+        if (error.code === 'P2025') { // Prisma's "Record not found" error code
+            return null;
+        }
+        throw error;
+    }
+};
   

@@ -1,5 +1,3 @@
-// src/config/swagger.ts
-
 import swaggerJSDoc from 'swagger-jsdoc';
 import path from 'path';
 

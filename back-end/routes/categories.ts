@@ -2,7 +2,7 @@
 
 import express from 'express';
 import * as categoriesController from '../controller/categoriesController';
-import { validateCategoryCreation, validateCategoryUpdate } from '../middleware/validation/CategoriesValidation';
+import { validateCategoryCreation, validateCategoryUpdate } from '../middleware/validation/categoriesValidation';
 import { validateRequest } from '../middleware/validateRequest';
 import { param } from 'express-validator';
 

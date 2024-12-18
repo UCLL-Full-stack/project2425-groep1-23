@@ -1,4 +1,5 @@
 import { body } from 'express-validator';
+import { Role } from '@prisma/client';
 
 /**
  * Validation rules for creating a new user.
@@ -37,4 +38,10 @@ export const validateUserUpdate = [
     .optional()
     .isIn(['USER', 'ADMIN', 'STUDENT', 'TEACHER'])
     .withMessage('Invalid role'),
+];
+
+export const validateUserRoleUpdate = [
+  body('role')
+    .exists().withMessage('Role is required')
+    .isIn(Object.values(Role)).withMessage(`Role must be one of: ${Object.values(Role).join(', ')}`)
 ];
