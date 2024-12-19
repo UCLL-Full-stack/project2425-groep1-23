@@ -1,23 +1,37 @@
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import FlashcardList from '../../components/FlashcardList';
-import { useEffect, useState } from 'react';
 import { getFlashcards } from '../../services/flashcardService';
 import { Flashcard } from '../../types';
 
-const FlashcardsPage: NextPage = () => {
-  const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
+interface FlashcardsPageProps {
+    flashcards: Flashcard[];
+}
 
-  useEffect(() => {
-    // Fetch flashcards from the API
-    getFlashcards().then((data) => setFlashcards(data));
-  }, []);
+const FlashcardsPage: NextPage<FlashcardsPageProps> = ({ flashcards }) => {
+    return (
+        <div>
+            <h1>Flashcards</h1>
+            <FlashcardList flashcards={flashcards} />
+        </div>
+    );
+};
 
-  return (
-    <div>
-      <h1>Flashcards</h1>
-      <FlashcardList flashcards={flashcards} />
-    </div>
-  );
+export const getServerSideProps: GetServerSideProps = async () => {
+    try {
+        const flashcards = await getFlashcards();
+        return {
+            props: {
+                flashcards,
+            },
+        };
+    } catch (error) {
+        console.error('Failed to fetch flashcards:', error);
+        return {
+            props: {
+                flashcards: [],
+            },
+        };
+    }
 };
 
 export default FlashcardsPage;

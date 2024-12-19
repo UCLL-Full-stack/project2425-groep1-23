@@ -1,0 +1,89 @@
+/* front-end/styles/LoginForm.module.css */
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align items at the top */
+  height: 82vh;
+  width: 100%;
+  color: var(--text-color);
+  padding-top: 2rem; /* Add some padding at the top */
+}
+
+.form {
+  background-color: var(--navbar-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+.title {
+  color: var(--text-color);
+  margin-bottom: 1rem; /* Add margin to the title */
+}
+
+.label {
+  color: var(--text-color);
+  margin-bottom: 0.5rem; /* Add margin to the labels */
+}
+
+.input {
+  width: 100%;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  background-color: var(--background-color);
+  color: var(--primary-color);
+  border: 1px solid var(--secondary-color);
+  margin-bottom: 1rem; /* Add margin to the input fields */
+}
+
+.errorBorder {
+  border-color: red;
+}
+
+.focusBorder {
+  border-color: var(--primary-color);
+}
+
+.button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border: none;
+  cursor: pointer;
+  margin-top: 1rem; /* Add margin to the button */
+}
+
+.button:hover {
+  background-color: var(--secondary-color);
+}
+
+.link {
+  color: var(--text-color);
+  margin-top: 1rem; /* Add margin to the link */
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.errorText {
+  color: red;
+  margin-bottom: 1rem; /* Add margin to the error text */
+}
+
+.generalError {
+  color: red;
+  margin-top: 1rem; /* Add margin to the general error */
+}
+
+.successMessage {
+  color: green;
+  margin-top: 1rem; /* Add margin to the success message */
+}
