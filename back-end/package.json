@@ -10,8 +10,8 @@
     },
     "scripts": {
         "test": "jest",
-        "start": "ts-node app.ts",
-        "dev": "nodemon app.ts",
+        "start": "ts-node server.ts",
+        "dev": "nodemon server.ts",
         "build": "tsc",
         "migrate": "prisma migrate dev",
         "generate": "prisma generate",

@@ -15,6 +15,13 @@ const options: swaggerJSDoc.Options = {
       },
     ],
     components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
       schemas: {
         User: {
           type: 'object',
@@ -313,13 +320,11 @@ const options: swaggerJSDoc.Options = {
           },
         },
       },
-      securitySchemes: {
-        BearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
+      security: [
+        {
+          bearerAuth: [],
         },
-      },
+      ],
     },
   },
   apis: [

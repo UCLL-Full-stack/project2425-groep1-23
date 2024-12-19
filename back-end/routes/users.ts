@@ -1,5 +1,3 @@
-// src/routes/usersRoutes.ts
-
 import express from 'express';
 import * as usersController from '../controller/usersController';
 import { 
@@ -111,9 +109,23 @@ router.post('/', validateUserCreation, validateRequest, usersController.createUs
  *         description: Failed to update user.
  *       404:
  *         description: User not found.
+ */
+router.get('/:id', 
+  param('id').isInt().withMessage('ID must be an integer'), 
+  validateRequest, 
+  usersController.getUserById
+);
+
+router.put('/:id', validateUserUpdate, validateRequest, usersController.updateUser);
+
+/**
+ * @swagger
+ * /users/{id}:
  *   delete:
  *     summary: Delete a user by ID
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -133,17 +145,11 @@ router.post('/', validateUserCreation, validateRequest, usersController.createUs
  *       500:
  *         description: Failed to delete user.
  */
-router.get('/:id', 
-  param('id').isInt().withMessage('ID must be an integer'), 
-  validateRequest, 
-  usersController.getUserById
-);
-
-router.put('/:id', validateUserUpdate, validateRequest, usersController.updateUser);
-
-router.delete('/:id', 
-  param('id').isInt().withMessage('ID must be an integer'), 
-  validateRequest, 
+router.delete(
+  '/:id',
+  authorizeRole(['ADMIN']),
+  param('id').isInt().withMessage('ID must be an integer'),
+  validateRequest,
   usersController.deleteUser
 );
 
@@ -192,11 +198,65 @@ router.delete('/:id',
  */
 router.patch(
   '/:id/role',
-  authorizeRole(['ADMIN']), // Only ADMIN can change roles
+  authorizeRole(['ADMIN']),
   param('id').isInt().withMessage('ID must be an integer'),
   validateUserRoleUpdate,
   validateRequest,
   usersController.updateUserRole
 );
+
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *     summary: Authenticate a user and return a JWT token
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *             required:
+ *               - email
+ *               - password
+ *     responses:
+ *       200:
+ *         description: Authentication successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       400:
+ *         description: Missing or invalid credentials
+ *       401:
+ *         description: Authentication failed
+ */
+router.post('/login', usersController.login);
+
+/**
+ * @swagger
+ * /users/logout:
+ *   post:
+ *     summary: Logs out the authenticated user by invalidating their token
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully logged out
+ *       401:
+ *         description: Unauthorized
+ */
+router.post('/logout', authorizeRole(['USER', 'ADMIN', 'STUDENT', 'TEACHER']), usersController.logout);
+
 
 export default router;

@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../app'; // Ensure your Express app is exported
+import app from '../app';
 
 describe('Flashcards API', () => {
   let createdFlashcardId: number;
@@ -10,7 +10,7 @@ describe('Flashcards API', () => {
       .send({
         question: 'What is the largest planet?',
         answer: 'Jupiter',
-        categoryId: 1, // Assume category with ID 1 exists
+        categoryId: 1,
       });
     expect(res.statusCode).toEqual(201);
     expect(res.body).toHaveProperty('id');
@@ -29,7 +29,7 @@ describe('Flashcards API', () => {
     const res = await request(app)
       .put(`/flashcards/${createdFlashcardId}`)
       .send({
-        categoryId: 2, // Assume category with ID 2 exists
+        categoryId: 2,
       });
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('categoryId', 2);

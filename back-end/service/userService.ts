@@ -56,7 +56,7 @@ export const getAllUsers = async (): Promise<Omit<User, 'password'>[]> => {
         assignments: true,
         progresses: true,
       },
-    }).catch(() => null); // Handle not found
+    }).catch(() => null);
   
     if (user) {
       const { password, ...rest } = user;
@@ -72,7 +72,7 @@ export const getAllUsers = async (): Promise<Omit<User, 'password'>[]> => {
         assignments: true,
         progresses: true,
       },
-    }).catch(() => null); // Handle not found
+    }).catch(() => null);
   
     if (user) {
       const { password, ...rest } = user;
@@ -110,5 +110,47 @@ export const getAllUsers = async (): Promise<Omit<User, 'password'>[]> => {
         }
         throw error;
     }
+};
+
+export const authenticateUser = async (
+  email: string,
+  password: string
+): Promise<Omit<User, 'password'> | null> => {
+  const user = await prisma.user.findUnique({ where: { email } });
+
+  if (!user) {
+    return null;
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) {
+    return null;
+  }
+
+  const { password: _, ...userWithoutPassword } = user;
+  return userWithoutPassword;
+};
+
+export const tokenBlacklist: Set<string> = new Set();
+
+/**
+ * Invalidates a JWT by adding it to the blacklist.
+ * @param token - The JWT to invalidate.
+ */
+export const invalidateToken = async (token: string): Promise<void> => {
+  console.log('Invalidating token:', token);
+  tokenBlacklist.add(token);
+  console.log('Current blacklist:', Array.from(tokenBlacklist));
+};
+
+/**
+ * Checks if a JWT is invalidated.
+ * @param token - The JWT to check.
+ * @returns `true` if the token is invalidated, otherwise `false`.
+ */
+export const isTokenInvalidated = (token: string): boolean => {
+  console.log('Checking if token is invalidated:', token);
+  return tokenBlacklist.has(token);  
 };
   

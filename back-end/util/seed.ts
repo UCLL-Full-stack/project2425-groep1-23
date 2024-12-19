@@ -1,9 +1,9 @@
 import { PrismaClient, Role, Status } from '@prisma/client';
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  // Seed Categories
   const categories = [
     { name: 'Science', description: 'Science-related flashcards' },
     { name: 'Mathematics', description: 'Math-related flashcards' },
@@ -20,11 +20,10 @@ async function main() {
 
   console.log('Categories seeded successfully!');
 
-  // Seed Users
   const users = [
     {
       email: 'admin@example.com',
-      password: 'securepassword123', // In production, ensure passwords are hashed
+      password: 'securepassword123',
       role: Role.ADMIN,
     },
     {
@@ -39,17 +38,35 @@ async function main() {
     },
   ];
 
-  for (const user of users) {
-    await prisma.user.upsert({
-      where: { email: user.email },
-      update: {},
-      create: user,
-    });
-  }
+  const seedUsers = async () => {
+    try {
+      for (const user of users) {
+        const hashedPassword = await bcrypt.hash(user.password, 10);
+        
+        await prisma.user.upsert({
+          where: { email: user.email },
+          update: {},
+          create: {
+            email: user.email,
+            password: hashedPassword,
+            role: user.role,
+          },
+        });
+      }
+  
+      console.log('Users seeded successfully');
+    } catch (error) {
+      console.error('Error seeding users:', error);
+      process.exit(1);
+    } finally {
+      await prisma.$disconnect();
+    }
+  };
+  
+  seedUsers();
 
   console.log('Users seeded successfully!');
 
-  // Fetch Categories and Users for relationships
   const scienceCategory = await prisma.category.findUnique({ where: { name: 'Science' } });
   const mathCategory = await prisma.category.findUnique({ where: { name: 'Mathematics' } });
   const historyCategory = await prisma.category.findUnique({ where: { name: 'History' } });
@@ -58,9 +75,7 @@ async function main() {
   const studentUser = await prisma.user.findUnique({ where: { email: 'student1@example.com' } });
   const teacherUser = await prisma.user.findUnique({ where: { email: 'teacher1@example.com' } });
 
-  // Seed Flashcards
   const flashcards = [
-    // Science Flashcards
     {
       question: 'What is the chemical symbol for water?',
       answer: 'H₂O',
@@ -71,7 +86,6 @@ async function main() {
       answer: 'Mars',
       categoryId: scienceCategory?.id,
     },
-    // Mathematics Flashcards
     {
       question: 'What is the value of π (pi) up to two decimal places?',
       answer: '3.14',
@@ -82,7 +96,6 @@ async function main() {
       answer: 'x = 2',
       categoryId: mathCategory?.id,
     },
-    // History Flashcards
     {
       question: 'Who was the first President of the United States?',
       answer: 'George Washington',
@@ -105,10 +118,8 @@ async function main() {
 
   console.log('Flashcards seeded successfully!');
 
-  // Seed Assignments
   const allFlashcards = await prisma.flashcard.findMany();
   const assignments = [
-    // Assign some flashcards to studentUser
     {
       userId: studentUser?.id!,
       flashcardId: allFlashcards.find(fc => fc.question === 'What is the chemical symbol for water?')?.id!,
@@ -119,7 +130,6 @@ async function main() {
       flashcardId: allFlashcards.find(fc => fc.question === 'What is the value of π (pi) up to two decimal places?')?.id!,
       assignedAt: new Date(),
     },
-    // Assign some flashcards to teacherUser
     {
       userId: teacherUser?.id!,
       flashcardId: allFlashcards.find(fc => fc.question === 'Who was the first President of the United States?')?.id!,
@@ -142,7 +152,6 @@ async function main() {
 
   console.log('Assignments seeded successfully!');
 
-  // Seed Progress
   const progresses = [
     {
       userId: studentUser?.id!,

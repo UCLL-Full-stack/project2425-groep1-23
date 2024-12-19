@@ -41,4 +41,9 @@ export class User {
     this.assignments.push(assignment);
     this.updatedAt = new Date();
   }
+
+  assignRole(role: Role): void {
+    this.role = role;
+    this.updatedAt = new Date();
+  }
 }

@@ -2,32 +2,10 @@ import { Request, Response, NextFunction } from 'express';
 import { User as PrismaUser } from '@prisma/client';
 import * as userService from '../service/userService';
 import { AuthorizationError, ValidationError } from '../errors';
+import jwt from 'jsonwebtoken';
 
-/**
- * @swagger
- * tags:
- *   name: Users
- *   description: API for users management
- */
-
-/**
- * @swagger
- * /users:
- *   get:
- *     summary: Retrieve a list of users
- *     tags: [Users]
- *     responses:
- *       200:
- *         description: A list of users.
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/User'
- *       500:
- *         description: Failed to fetch users.
- */
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+const JWT_EXPIRATION = '1h';
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -39,31 +17,6 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
     }
   };
 
-/**
- * @swagger
- * /users/{id}:
- *   get:
- *     summary: Retrieve a single user by ID
- *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: Numeric ID of the user to retrieve.
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: User found.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *       404:
- *         description: User not found.
- *       500:
- *         description: Failed to fetch user.
- */
 export const getUserById = async (req: Request, res: Response, next: NextFunction) => {
     const id = parseInt(req.params.id);
   
@@ -80,28 +33,6 @@ export const getUserById = async (req: Request, res: Response, next: NextFunctio
     }
   };
 
-/**
- * @swagger
- * /users:
- *   post:
- *     summary: Create a new user
- *     tags: [Users]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/NewUser'
- *     responses:
- *       201:
- *         description: User created successfully.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *       400:
- *         description: Failed to create user.
- */
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
     const { email, password, role } = req.body;
   
@@ -118,37 +49,6 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
     }
   };
 
-/**
- * @swagger
- * /users/{id}:
- *   put:
- *     summary: Update an existing user
- *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: Numeric ID of the user to update.
- *         schema:
- *           type: integer
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UpdateUser'
- *     responses:
- *       200:
- *         description: User updated successfully.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *       400:
- *         description: Failed to update user.
- *       404:
- *         description: User not found.
- */
 export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
     const id = parseInt(req.params.id);
     const { email, password, role } = req.body;
@@ -171,31 +71,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
     }
   };
 
-/**
- * @swagger
- * /users/{id}:
- *   delete:
- *     summary: Delete a user by ID
- *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: Numeric ID of the user to delete.
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: User deleted successfully.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *       404:
- *         description: User not found.
- *       500:
- *         description: Failed to delete user.
- */
+
 export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
     const id = parseInt(req.params.id);
   
@@ -212,47 +88,6 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
     }
   };
 
-/**
- * @swagger
- * /users/{id}/role:
- *   patch:
- *     summary: Update a user's role
- *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: Numeric ID of the user whose role is to be updated.
- *         schema:
- *           type: integer
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               role:
- *                 type: string
- *                 enum: [USER, ADMIN, STUDENT, TEACHER]
- *             required:
- *               - role
- *     responses:
- *       200:
- *         description: User role updated successfully.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *       400:
- *         description: Invalid role provided.
- *       404:
- *         description: User not found.
- *       403:
- *         description: Unauthorized to change user roles.
- *       500:
- *         description: Failed to update user role.
- */
 export const updateUserRole = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id);
   const { role } = req.body;
@@ -273,5 +108,51 @@ export const updateUserRole = async (req: Request, res: Response, next: NextFunc
       } else {
           res.status(500).json({ error: 'Failed to update user role' });
       }
+  }
+};
+
+export const login = async (req: Request, res: Response, next: NextFunction) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required' });
+  }
+
+  try {
+    const user = await userService.authenticateUser(email, password);
+
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      JWT_SECRET,
+      { expiresIn: JWT_EXPIRATION }
+    );
+
+    res.json({ token });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const logout = async (req: Request, res: Response, next: NextFunction) => {
+  const token = req.headers.authorization?.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'No token provided' });
+  }
+
+  try {
+    jwt.verify(token, JWT_SECRET);
+
+    await userService.invalidateToken(token);
+
+    res.status(200).json({ message: 'Successfully logged out' });
+  } catch (error) {
+    console.error('Logout error:', error);
+    res.status(401).json({ error: 'Invalid token' });
   }
 };

@@ -1,5 +1,3 @@
-// src/routes/categoriesRoutes.ts
-
 import express from 'express';
 import * as categoriesController from '../controller/categoriesController';
 import { validateCategoryCreation, validateCategoryUpdate } from '../middleware/validation/categoriesValidation';
