@@ -24,3 +24,14 @@ export interface Flashcard {
     message: string;
     type: "error" | "success";
 };
+
+export type Role = 'USER' | 'ADMIN' | 'STUDENT' | 'TEACHER';
+
+export interface User {
+  id: number;
+  email: string;
+  password: string;
+  role: Role;
+  createdAt: string;
+  updatedAt: string;
+}
