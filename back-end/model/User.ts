@@ -37,8 +37,6 @@ export class User {
     this.progresses = user.progresses || [];
   }
 
-  /* write getters */
-
   getId(): number {
     return this.id;
   }

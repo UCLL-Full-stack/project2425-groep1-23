@@ -1,13 +1,13 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
-import prisma from './util/database';
 import flashcardsRouter from './controller/flashcards.routes';
 import categoriesRouter from './controller/categories.routes';
 import usersRouter from './controller/users.routes';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger';
 import { expressjwt } from 'express-jwt';
+import { ApiError } from './errors/ApiError';
 
 dotenv.config();
 const app = express();
@@ -29,13 +29,23 @@ app.use(
   })
 );
 
+app.use((req: Request, res: Response, next: NextFunction) => {
+  const error = new ApiError('Route Not Found', 404);
+  next(error);
+});
+
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  if (err.name === 'UnauthorizedError') {
-      res.status(401).json({ status: 'unauthorized', message: err.message });
-  } else if (err.name === 'CoursesError') {
-      res.status(400).json({ status: 'domain error', message: err.message });
+  console.error(err);
+
+  if (err instanceof ApiError) {
+    res.status(err.statusCode).json({
+      error: err.message,
+      ...(err.details && { details: err.details }),
+    });
   } else {
-      res.status(400).json({ status: 'application error', message: err.message });
+    res.status(500).json({
+      error: 'Internal Server Error',
+    });
   }
 });
 

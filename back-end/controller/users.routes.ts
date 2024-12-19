@@ -2,8 +2,8 @@ import express, { NextFunction, Request, Response } from 'express';
 import { User as PrismaUser } from '@prisma/client';
 import * as userService from '../service/userService';
 import { UserInput } from '../types';
-import { validateUserCreation, validateUserUpdate } from '../middleware/validation/usersValidation';
-import { validateRequest } from '../middleware/validateRequest';
+// import { validateUserCreation, validateUserUpdate } from '../middleware/validation/usersValidation';
+// import { validateRequest } from '../middleware/validateRequest';
 import { param } from 'express-validator';
 
 const usersRouter = express.Router();
@@ -100,8 +100,7 @@ usersRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
     const users: Omit<PrismaUser, 'password'>[] = await userService.getAllUsers();
     res.json(users);
   } catch (error) {
-    console.error('Error fetching users:', error);
-    res.status(500).json({ error: 'Failed to fetch users' });
+    next(error);
   }
 });
 
@@ -132,21 +131,19 @@ usersRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
  *       500:
  *         description: Failed to fetch user.
  */
-usersRouter.get('/:id', param('id').isInt().withMessage('ID must be an integer'), validateRequest, async (req: Request, res: Response, next: NextFunction) => {
-  const id = parseInt(req.params.id);
+usersRouter.get('/:id',
+  param('id').isInt().withMessage('ID must be an integer'),
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = parseInt(req.params.id);
 
-  try {
-    const user: Omit<PrismaUser, 'password'> | null = await userService.getUserById(id);
-    if (user) {
+    try {
+      const user: Omit<PrismaUser, 'password'> | null = await userService.getUserById(id);
       res.json(user);
-    } else {
-      res.status(404).json({ error: 'User not found' });
+    } catch (error) {
+      next(error);
     }
-  } catch (error) {
-    console.error(`Error fetching user with id ${id}:`, error);
-    res.status(500).json({ error: 'Failed to fetch user' });
   }
-});
+);
 
 /**
  * @swagger
@@ -170,25 +167,26 @@ usersRouter.get('/:id', param('id').isInt().withMessage('ID must be an integer')
  *       400:
  *         description: Failed to create user.
  */
-usersRouter.post('/', validateUserCreation, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
-  const { email, password, role } = req.body;
+usersRouter.post('/',
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password, role } = req.body;
 
-  try {
-    const newUser: Omit<PrismaUser, 'password'> = await userService.createUser({
-      email,
-      password,
-      role,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      assignments: [],
-      progresses: [],
-    });
-    res.status(201).json(newUser);
-  } catch (error) {
-    console.error('Error creating user:', error);
-    res.status(400).json({ error: 'Failed to create user' });
+    try {
+      const newUser: Omit<PrismaUser, 'password'> = await userService.createUser({
+        email,
+        password,
+        role,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        assignments: [],
+        progresses: [],
+      });
+      res.status(201).json(newUser);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 /**
  * @swagger
@@ -223,27 +221,24 @@ usersRouter.post('/', validateUserCreation, validateRequest, async (req: Request
  *       404:
  *         description: User not found.
  */
-usersRouter.put('/:id', validateUserUpdate, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
-  const id = parseInt(req.params.id);
-  const { email, password, role } = req.body;
+usersRouter.put('/:id',
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = parseInt(req.params.id);
+    const { email, password, role } = req.body;
 
-  try {
-    const updatedUser: Omit<PrismaUser, 'password'> | null = await userService.updateUser(id, {
-      email,
-      password,
-      role,
-    });
+    try {
+      const updatedUser: Omit<PrismaUser, 'password'> | null = await userService.updateUser(id, {
+        email,
+        password,
+        role,
+      });
 
-    if (updatedUser) {
       res.json(updatedUser);
-    } else {
-      res.status(404).json({ error: 'User not found' });
+    } catch (error) {
+      next(error);
     }
-  } catch (error) {
-    console.error(`Error updating user with id ${id}:`, error);
-    res.status(400).json({ error: 'Failed to update user' });
   }
-});
+);
 
 /**
  * @swagger
@@ -272,21 +267,19 @@ usersRouter.put('/:id', validateUserUpdate, validateRequest, async (req: Request
  *       500:
  *         description: Failed to delete user.
  */
-usersRouter.delete('/:id', param('id').isInt().withMessage('ID must be an integer'), validateRequest, async (req: Request, res: Response, next: NextFunction) => {
-  const id = parseInt(req.params.id);
+usersRouter.delete('/:id',
+  param('id').isInt().withMessage('ID must be an integer'),
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = parseInt(req.params.id);
 
-  try {
-    const deletedUser: Omit<PrismaUser, 'password'> | null = await userService.deleteUser(id);
-    if (deletedUser) {
+    try {
+      const deletedUser: Omit<PrismaUser, 'password'> | null = await userService.deleteUser(id);
       res.json(deletedUser);
-    } else {
-      res.status(404).json({ error: 'User not found' });
+    } catch (error) {
+      next(error);
     }
-  } catch (error) {
-    console.error(`Error deleting user with id ${id}:`, error);
-    res.status(500).json({ error: 'Failed to delete user' });
   }
-});
+);
 
 /**
  * @swagger
@@ -322,7 +315,7 @@ usersRouter.post('/signup', async (req: Request, res: Response, next: NextFuncti
       updatedAt: new Date(),
     };
     const user = await userService.createUser(userInput);
-    res.status(200).json(user);
+    res.status(201).json(user);
   } catch (error) {
     next(error);
   }

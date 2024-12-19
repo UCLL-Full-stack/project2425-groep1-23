@@ -1,3 +1,5 @@
+import { Role, Assignment, Progress } from '@prisma/client';
+
 type UserInput = {
   id?: number;
   email: string;
@@ -14,5 +16,9 @@ type AuthenticationResponse = {
   username: string;
   fullname: string;
 };
+
+export interface UpdateUserRoleInput {
+  role: Role; // Assuming Role is already defined and imported
+}
 
 export { UserInput, AuthenticationResponse };

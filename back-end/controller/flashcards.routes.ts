@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { Flashcard, Prisma } from '@prisma/client';
 import * as flashcardsService from '../service/flashcardsService';
-import { validateFlashcardCreation, validateFlashcardUpdate } from '../middleware/validation/flashcardsValidation';
-import { validateRequest } from '../middleware/validateRequest';
+// import { validateFlashcardCreation, validateFlashcardUpdate } from '../middleware/validation/flashcardsValidation';
+// import { validateRequest } from '../middleware/validateRequest';
 import { param } from 'express-validator';
 
 const flashcardsRouter = express.Router();
@@ -103,7 +103,7 @@ flashcardsRouter.get('/', async (req: Request, res: Response, next: NextFunction
  *       500:
  *         description: Failed to fetch flashcard.
  */
-flashcardsRouter.get('/:id', param('id').isInt().withMessage('ID must be an integer'), validateRequest, async (req: Request, res: Response, next: NextFunction) => {
+flashcardsRouter.get('/:id', param('id').isInt().withMessage('ID must be an integer'), async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id);
 
   try {
@@ -143,7 +143,7 @@ flashcardsRouter.get('/:id', param('id').isInt().withMessage('ID must be an inte
  *       400:
  *         description: Failed to create flashcard.
  */
-flashcardsRouter.post('/', validateFlashcardCreation, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
+flashcardsRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
   const { question, answer, categoryId } = req.body;
 
   try {
@@ -198,7 +198,7 @@ flashcardsRouter.post('/', validateFlashcardCreation, validateRequest, async (re
  *       404:
  *         description: Flashcard not found.
  */
-flashcardsRouter.put('/:id', validateFlashcardUpdate, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
+flashcardsRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id);
   const { question, answer, categoryId } = req.body;
 
@@ -257,7 +257,7 @@ flashcardsRouter.put('/:id', validateFlashcardUpdate, validateRequest, async (re
  *       500:
  *         description: Failed to delete flashcard.
  */
-flashcardsRouter.delete('/:id', param('id').isInt().withMessage('ID must be an integer'), validateRequest, async (req: Request, res: Response, next: NextFunction) => {
+flashcardsRouter.delete('/:id', param('id').isInt().withMessage('ID must be an integer'), async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id);
 
   try {

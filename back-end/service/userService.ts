@@ -1,10 +1,13 @@
 import database from '../util/database';
-import { User as CustomUser } from '../model/User';
 import { User as PrismaUser, Prisma } from '@prisma/client';
 import userDB from '../repository/user.db';
 import { AuthenticationResponse, UserInput } from '../types';
 import bcrypt from 'bcrypt';
 import { generateJwtToken } from '../util/jwt';
+import { BadRequestError} from '../errors/BadRequestError';
+import { NotFoundError} from '../errors/NotFoundError';
+import { UnauthorizedError } from '../errors/UnauthorizedError';
+import userDb from '../repository/user.db';
 
 export const getAllUsers = async (): Promise<Omit<PrismaUser, 'password'>[]> => {
   const users = await database.user.findMany({
@@ -28,13 +31,13 @@ export const getUserById = async (id: number): Promise<Omit<PrismaUser, 'passwor
     const { password, ...rest } = user;
     return rest;
   }
-  return null;
+  throw new NotFoundError(`User with ID ${id} not found`);
 };
 
 export const createUser = async (data: UserInput): Promise<Omit<PrismaUser, 'password'>> => {
   const existingUser = await userDB.getUserByEmail(data.email);
   if (existingUser) {
-    throw new Error(`User with email: ${data.email} already exists`);
+    throw new BadRequestError(`User with email ${data.email} already exists`);
   }
   const hashedPassword = await bcrypt.hash(data.password, 10);
   const user = await database.user.create({
@@ -70,54 +73,65 @@ export const authenticate = async ({ email, password }: UserInput): Promise<Auth
   const user = await userDB.getUserByEmail(email);
 
   if (!user) {
-    throw new Error('User not found');
+    throw new NotFoundError('User not found');
   }
 
   const isValidPassword = await bcrypt.compare(password, user.password);
   if (!isValidPassword) {
-    throw new Error('Incorrect password');
+    throw new UnauthorizedError('Incorrect password');
   }
 
   return {
     token: generateJwtToken({ username: email, role: user.role }),
     username: email,
-    fullname: `${user.email}`, // Assuming fullname is not available, using email instead
+    fullname: `${user.email}`,
   };
 };
 
 export const updateUser = async (id: number, data: Prisma.UserUpdateInput): Promise<Omit<PrismaUser, 'password'> | null> => {
+  const existingUser = await userDB.getUserById(id);
+
+  if (!existingUser) {
+    throw new NotFoundError(`User with ID ${id} not found`);
+  }
+
   if (data.password) {
     data.password = await bcrypt.hash(data.password as string, 10);
   }
 
-  const user = await database.user.update({
-    where: { id },
-    data,
-    include: {
-      assignments: true,
-      progresses: true,
-    },
-  }).catch(() => null); // Handle not found
-
-  if (user) {
+  try {
+    const user = await database.user.update({
+      where: { id },
+      data,
+      include: {
+        assignments: true,
+        progresses: true,
+      },
+    });
     const { password, ...rest } = user;
     return rest;
+  } catch (error) {
+    throw new BadRequestError('Failed to update user', error);
   }
-  return null;
 };
 
 export const deleteUser = async (id: number): Promise<Omit<PrismaUser, 'password'> | null> => {
-  const user = await database.user.delete({
-    where: { id },
-    include: {
-      assignments: true,
-      progresses: true,
-    },
-  }).catch(() => null); // Handle not found
-
-  if (user) {
+  const existingUser = await database.user.findUnique({ where: { id } });
+  if (!existingUser) {
+    throw new NotFoundError(`User with ID ${id} not found`);
+  }
+  
+  try {
+    const user = await database.user.delete({
+      where: { id },
+      include: {
+        assignments: true,
+        progresses: true,
+      },
+    });
     const { password, ...rest } = user;
     return rest;
+  } catch (error) {
+    throw new BadRequestError('Failed to delete user', error);
   }
-  return null;
 };

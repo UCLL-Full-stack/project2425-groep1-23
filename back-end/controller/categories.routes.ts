@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { Category } from '@prisma/client';
 import * as categoryService from '../service/categoriesService';
-import { validateCategoryCreation, validateCategoryUpdate } from '../middleware/validation/categoriesValidation';
-import { validateRequest } from '../middleware/validateRequest';
+// import { validateCategoryCreation, validateCategoryUpdate } from '../middleware/validation/categoriesValidation';
+// import { validateRequest } from '../middleware/validateRequest';
 import { param } from 'express-validator';
 
 const categoriesRouter = express.Router();
@@ -94,7 +94,7 @@ categoriesRouter.get('/', async (req: Request, res: Response, next: NextFunction
  *       500:
  *         description: Failed to fetch category.
  */
-categoriesRouter.get('/:id', param('id').isInt().withMessage('ID must be an integer'), validateRequest, async (req: Request, res: Response, next: NextFunction) => {
+categoriesRouter.get('/:id', param('id').isInt().withMessage('ID must be an integer'), async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id);
 
   try {
@@ -134,7 +134,7 @@ categoriesRouter.get('/:id', param('id').isInt().withMessage('ID must be an inte
  *       400:
  *         description: Failed to create category.
  */
-categoriesRouter.post('/', validateCategoryCreation, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
+categoriesRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
   const { name, description } = req.body;
 
   try {
@@ -182,7 +182,7 @@ categoriesRouter.post('/', validateCategoryCreation, validateRequest, async (req
  *       404:
  *         description: Category not found.
  */
-categoriesRouter.put('/:id', validateCategoryUpdate, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
+categoriesRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id);
   const { name, description } = req.body;
 
@@ -230,7 +230,7 @@ categoriesRouter.put('/:id', validateCategoryUpdate, validateRequest, async (req
  *       500:
  *         description: Failed to delete category.
  */
-categoriesRouter.delete('/:id', param('id').isInt().withMessage('ID must be an integer'), validateRequest, async (req: Request, res: Response, next: NextFunction) => {
+categoriesRouter.delete('/:id', param('id').isInt().withMessage('ID must be an integer'), async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id);
 
   try {
