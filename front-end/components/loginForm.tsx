@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 import Cookies from 'js-cookie';
 import styles from '../styles/LoginForm.module.css';
 
 const LoginForm: React.FC = () => {
+    const { t } = useTranslation('common');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
@@ -15,29 +17,26 @@ const LoginForm: React.FC = () => {
         const validationErrors: { email?: string; password?: string } = {};
 
         if (!email) {
-            validationErrors.email = 'Email address is required';
+            validationErrors.email = t('login.validate.email');
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            validationErrors.email = 'Please enter a valid email address';
+            validationErrors.email = t('login.validate.emailInvalid');
         }
 
         if (!password) {
-            validationErrors.password = 'Password is required';
-        } else if (password.length < 8) {
-            validationErrors.password = 'Password must be at least 8 characters long';
+            validationErrors.password = t('login.validate.password');
         }
 
         setErrors(validationErrors);
-
-        return JSON.stringify(validationErrors) === '{}';
+        return Object.keys(validationErrors).length === 0;
     };
 
-    const formHandling = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setGeneralError('');
+    const formHandling = async (e: React.FormEvent) => {
+        e.preventDefault();
 
         if (!validate()) {
             return;
         }
+
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/login`, {
                 method: 'POST',
@@ -47,8 +46,7 @@ const LoginForm: React.FC = () => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                console.log(errorData);
-                throw new Error('Login failed. Please try again');
+                throw new Error(errorData.message || t('login.error'));
             }
 
             const data = await response.json();
@@ -62,17 +60,17 @@ const LoginForm: React.FC = () => {
                     })
                 );
 
-                setSuccessMessage('Login successful! Redirecting...');
+                setSuccessMessage(t('login.success'));
                 setTimeout(() => {
                     Cookies.set('token', data.token, { expires: 1 });
-                    router.push('/flashcards');
+                    router.push('/flashcards'); // Redirect to flashcards page
                 }, 2000);
             }
         } catch (error) {
             if (error instanceof Error) {
-                setGeneralError(error.message || 'An unexpected error occurred. Please try again.');
+                setGeneralError(error.message || t('login.error'));
             } else {
-                setGeneralError('An unexpected error occurred. Please try again.');
+                setGeneralError(t('login.error'));
             }
         }
     };
@@ -80,9 +78,9 @@ const LoginForm: React.FC = () => {
     return (
         <div className={styles.container}>
             <form onSubmit={formHandling} className={styles.form}>
-                <h1 className={styles.title}>Login</h1>
+                <h1 className={styles.title}>{t('login.title')}</h1>
                 <label htmlFor="email" className={styles.label}>
-                    Email
+                    {t('login.label.email')}
                 </label>
                 <input
                     type="email"
@@ -96,7 +94,7 @@ const LoginForm: React.FC = () => {
                 {errors.email && <p className={styles.errorText}>{errors.email}</p>}
 
                 <label htmlFor="password" className={styles.label}>
-                    Password
+                    {t('login.label.password')}
                 </label>
                 <input
                     type="password"
@@ -110,14 +108,13 @@ const LoginForm: React.FC = () => {
                 {errors.password && <p className={styles.errorText}>{errors.password}</p>}
 
                 <button type="submit" className={styles.button}>
-                    Login
+                    {t('login.button')}
                 </button>
                 <a className={styles.link} href="/register">
-                    Don't have an account already
+                    {t('login.registerLink')}
                 </a>
-
-                {generalError && <div className={styles.generalError}>{generalError}</div>}
-                {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
+                {generalError && <p className={styles.generalError}>{generalError}</p>}
+                {successMessage && <p className={styles.successMessage}>{successMessage}</p>}
             </form>
         </div>
     );

@@ -3,66 +3,78 @@ import { useEffect, useState } from 'react';
 import { getFlashcardById } from '../../services/flashcardService';
 import { Flashcard } from '../../types';
 import FlipCard from '../../components/FlipCard';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import styles from '../../styles/FlashCardDetail.module.css';
 
 const FlashcardDetailPage = () => {
-  const router = useRouter();
-  const { id } = router.query;
+    const router = useRouter();
+    const { id } = router.query;
 
-  const [flashcard, setFlashcard] = useState<Flashcard | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+    const [flashcard, setFlashcard] = useState<Flashcard | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchFlashcard = async () => {
-      try {
-        const loggedInUser = sessionStorage.getItem('loggedInUser');
-        if (!loggedInUser) {
-          router.push('/login');
-          return;
+    useEffect(() => {
+        const fetchFlashcard = async () => {
+            try {
+                const loggedInUser = sessionStorage.getItem('loggedInUser');
+                if (!loggedInUser) {
+                    router.push('/login');
+                    return;
+                }
+
+                const parsedId = Number(id);
+                if (!id || isNaN(parsedId)) {
+                    setError('Invalid flashcard ID.');
+                    return;
+                }
+
+                const { token } = JSON.parse(loggedInUser);
+
+                const flashcard = await getFlashcardById(parsedId, token);
+                setFlashcard(flashcard);
+            } catch (err) {
+                setError(
+                    err instanceof Error
+                        ? err.message
+                        : 'An error occurred while fetching flashcard.'
+                );
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (id) {
+            fetchFlashcard();
         }
+    }, [id, router]);
 
-        const parsedId = Number(id);
-        if (!id || isNaN(parsedId)) {
-          setError('Invalid flashcard ID.');
-          return;
-        }
-
-        const { token } = JSON.parse(loggedInUser);
-
-        const flashcard = await getFlashcardById(parsedId, token);
-        setFlashcard(flashcard);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred while fetching flashcard.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (id) {
-      fetchFlashcard();
+    if (loading) {
+        return <div>Loading...</div>;
     }
-  }, [id, router]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+    if (error) {
+        return <div>{error}</div>;
+    }
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+    if (!flashcard) {
+        return <div>Flashcard not found.</div>;
+    }
 
-  if (!flashcard) {
-    return <div>Flashcard not found.</div>;
-  }
-
-  return (
-    <div className={styles.container}>
-      <h1>Flashcard Detail</h1>
-      <FlipCard question={flashcard.question} answer={flashcard.answer} />
-    </div>
-  );
+    return (
+        <div className={styles.container}>
+            <h1>Flashcard Detail</h1>
+            <FlipCard question={flashcard.question} answer={flashcard.answer} />
+        </div>
+    );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+    },
+});
 
 export default FlashcardDetailPage;

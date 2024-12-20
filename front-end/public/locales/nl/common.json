@@ -7,13 +7,16 @@
     "button": "Inloggen",
     "success": "Inloggen succesvol. Doorverwijzen naar de startpagina...",
     "validate": {
-      "name": "Naam is verplicht",
+      "email": "E-mail is verplicht",
+      "emailInvalid": "Voer een geldig e-mailadres in",
       "password": "Wachtwoord is verplicht"
     },
     "label": {
-      "username": "Gebruikersnaam:",
+      "email": "E-mail:",
       "password": "Wachtwoord:"
     },
+    "registerLink": "Registreren",
+    "error": "Inloggen mislukt. Probeer het opnieuw.",
     "information": {
       "title": "Login Informatie",
       "username": "Gebruikersnaam",
@@ -51,11 +54,15 @@
     }
   },
   "flashcards": {
+    "title": "Flashcards",
     "create.title": "Nieuwe Flashcard Aanmaken",
     "create.button": "Flashcard Aanmaken",
+    "create.question": "Vraag:",
+    "create.answer": "Antwoord:",
     "edit.title": "Flashcard Bewerken",
-    "edit.button": "Flashcard Bijwerken",
+    "edit.button": "Bewerken",
     "delete.button": "Verwijderen",
+    "delete.error": "Flashcard verwijderen mislukt",
     "view.details": "Bekijk Details",
     "loading": "Flashcards laden...",
     "error": "Er is een fout opgetreden bij het ophalen van flashcards."

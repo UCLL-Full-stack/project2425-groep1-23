@@ -7,13 +7,16 @@
     "button": "Login",
     "success": "Login successful. Redirecting to homepage...",
     "validate": {
-      "name": "Name is required",
+      "email": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
       "password": "Password is required"
     },
     "label": {
-      "username": "Username:",
+      "email": "Email:",
       "password": "Password:"
     },
+    "registerLink": "Register",
+    "error": "Login failed. Please try again.",
     "information": {
       "title": "Login Information",
       "username": "Username",
@@ -51,11 +54,15 @@
     }
   },
   "flashcards": {
+    "title": "Flashcards",
     "create.title": "Create New Flashcard",
     "create.button": "Create Flashcard",
+    "create.question": "Question:",
+    "create.answer": "Answer:",
     "edit.title": "Edit Flashcard",
-    "edit.button": "Update Flashcard",
+    "edit.button": "Edit",
     "delete.button": "Delete",
+    "delete.error": "Failed to delete flashcard",
     "view.details": "View Details",
     "loading": "Loading flashcards...",
     "error": "An error occurred while fetching flashcards."

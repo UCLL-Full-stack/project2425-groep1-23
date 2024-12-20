@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 import Cookies from 'js-cookie';
 import styles from '../styles/LoginForm.module.css';
 
 const RegisterForm: React.FC = () => {
+    const { t } = useTranslation('common');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -21,19 +23,19 @@ const RegisterForm: React.FC = () => {
             {};
 
         if (!email) {
-            validationErrors.email = 'Email address is required';
+            validationErrors.email = t('register.validate.email');
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            validationErrors.email = 'Please enter a valid email address';
+            validationErrors.email = t('register.validate.emailInvalid');
         }
 
         if (!password) {
-            validationErrors.password = 'Password is required';
+            validationErrors.password = t('register.validate.password');
         } else if (password.length < 8) {
-            validationErrors.password = 'Password must be at least 8 characters long';
+            validationErrors.password = t('register.validate.passwordLength');
         }
 
         if (password !== confirmPassword) {
-            validationErrors.confirmPassword = 'Passwords do not match';
+            validationErrors.confirmPassword = t('register.validate.confirmPasswordMatch');
         }
 
         setErrors(validationErrors);
@@ -58,28 +60,28 @@ const RegisterForm: React.FC = () => {
             if (!response.ok) {
                 const errorData = await response.json();
                 console.log(errorData);
-                throw new Error('Registration failed. Please try again');
+                throw new Error(t('register.error'));
             }
 
             const data = await response.json();
             if (data.token) {
-                setSuccessMessage('Registration successful! Redirecting...');
+                setSuccessMessage(t('register.success'));
                 setTimeout(() => {
                     Cookies.set('token', data.token, { expires: 1 });
                     router.push('/profile');
                 }, 2000);
             }
         } catch (error) {
-            setGeneralError(error.message || 'An unexpected error occurred. Please try again.');
+            setGeneralError(error.message || t('register.error'));
         }
     };
 
     return (
         <div className={styles.container}>
             <form onSubmit={formHandling} className={styles.form}>
-                <h1 className={styles.title}>Register</h1>
+                <h1 className={styles.title}>{t('register.title')}</h1>
                 <label htmlFor="email" className={styles.label}>
-                    Email
+                    {t('register.label.email')}
                 </label>
                 <input
                     type="email"
@@ -93,7 +95,7 @@ const RegisterForm: React.FC = () => {
                 {errors.email && <p className={styles.errorText}>{errors.email}</p>}
 
                 <label htmlFor="password" className={styles.label}>
-                    Password
+                    {t('register.label.password')}
                 </label>
                 <input
                     type="password"
@@ -107,7 +109,7 @@ const RegisterForm: React.FC = () => {
                 {errors.password && <p className={styles.errorText}>{errors.password}</p>}
 
                 <label htmlFor="confirmPassword" className={styles.label}>
-                    Confirm Password
+                    {t('register.label.confirmPassword')}
                 </label>
                 <input
                     type="password"
@@ -123,10 +125,10 @@ const RegisterForm: React.FC = () => {
                 )}
 
                 <button type="submit" className={styles.button}>
-                    Register
+                    {t('register.button')}
                 </button>
                 <a className={styles.link} href="/login">
-                    Already have an account? Login
+                    {t('register.loginLink')}
                 </a>
 
                 {generalError && <div className={styles.generalError}>{generalError}</div>}

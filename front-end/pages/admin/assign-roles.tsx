@@ -4,6 +4,8 @@ import { getUsers, updateUserRole } from '../../services/userService';
 import { User, Role } from '../../types';
 import AssignRoleForm from '../../components/AssignRoleForm';
 import styles from '../../styles/AssignRoleForm.module.css';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface AssignRolesPageProps {
     users: User[];
@@ -57,5 +59,11 @@ export const getServerSideProps: GetServerSideProps = async () => {
         };
     }
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+    },
+});
 
 export default AssignRolesPage;
