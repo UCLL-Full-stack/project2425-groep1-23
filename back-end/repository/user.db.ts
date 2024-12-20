@@ -1,5 +1,7 @@
 import { User } from '../model/User';
+import { Role } from '../model/Role';
 import database from '../util/database';
+//import { Role } from '@prisma/client';
 
 const getAllUsers = async (): Promise<User[]> => {
     try {
@@ -105,9 +107,30 @@ const createUser = async ({
     }
 };
 
+const updateUserRole = async (id: number, role: Role): Promise<User | null> => {
+    try {
+        const updatedUserPrisma = await database.user.update({
+            where: { id },
+            data: { role },
+            include: {
+                assignments: true,
+                progresses: true,
+            },
+        });
+        return User.from(updatedUserPrisma);
+    } catch (error: any) {
+        if (error.code === 'P2025') { // Prisma's "Record to update not found."
+            return null;
+        }
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     getAllUsers,
     getUserById,
     getUserByEmail,
     createUser,
+    updateUserRole,
 };

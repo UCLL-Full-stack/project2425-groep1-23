@@ -1,5 +1,6 @@
 import database from '../util/database';
-import { User as PrismaUser, Prisma } from '@prisma/client';
+import { User as PrismaUser, Prisma} from '@prisma/client';
+import { Role } from '../model/Role';
 import userDB from '../repository/user.db';
 import { AuthenticationResponse, UserInput } from '../types';
 import bcrypt from 'bcrypt';
@@ -7,7 +8,6 @@ import { generateJwtToken } from '../util/jwt';
 import { BadRequestError} from '../errors/BadRequestError';
 import { NotFoundError} from '../errors/NotFoundError';
 import { UnauthorizedError } from '../errors/UnauthorizedError';
-import userDb from '../repository/user.db';
 
 export const getAllUsers = async (): Promise<Omit<PrismaUser, 'password'>[]> => {
   const users = await database.user.findMany({
@@ -134,4 +134,16 @@ export const deleteUser = async (id: number): Promise<Omit<PrismaUser, 'password
   } catch (error) {
     throw new BadRequestError('Failed to delete user', error);
   }
+};
+
+export const updateUserRole = async (id: number, role: Role): Promise<PrismaUser | null> => {
+  // Optional: Add authorization logic here to ensure only certain roles can perform this action
+
+  // Update the role using the repository
+  const updatedUser = await userDB.updateUserRole(id, role);
+  if (!updatedUser) {
+      throw new NotFoundError(`User with ID ${id} not found`);
+  }
+
+  return updatedUser;
 };
