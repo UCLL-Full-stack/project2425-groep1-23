@@ -1,5 +1,6 @@
 {
   "app.title": "Flashcard App",
+  "app.description": "Welcome to Flashcard App! This application helps you create, manage, and study flashcards to enhance your learning experience. Whether you are a student, teacher, or lifelong learner, our app provides the tools you need to succeed.",
   "general.error": "An error has occurred. Please try again later.",
   "general.unauthorized": "Unauthorized access. Please log in.",
   "login": {
@@ -61,10 +62,14 @@
     "create.answer": "Answer:",
     "edit.title": "Edit Flashcard",
     "edit.button": "Edit",
+    "edit.error": "Failed to update flashcard",
     "delete.button": "Delete",
     "delete.error": "Failed to delete flashcard",
     "view.details": "View Details",
     "loading": "Loading flashcards...",
+    "notFound": "Flashcard not found",
+    "invalidId": "Invalid flashcard ID.",
+    "fetchError": "An error occurred while fetching flashcard.",
     "error": "An error occurred while fetching flashcards."
   },
   "categories": {

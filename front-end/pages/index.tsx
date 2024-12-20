@@ -21,16 +21,7 @@ const Home: NextPage = () => {
                     <div className={`flex flex-col ml-4 p-8 ${styles.textSection}`}>
                         <div className={`mr-4 ${styles.box}`}>
                             <h1 className="m-8 text-6xl text-left ml-0 mb-4">{t('app.title')}</h1>
-                            <p className="mb-4">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio
-                                molestias, in, repellat natus doloremque eius nisi explicabo hic
-                                commodi laboriosam accusantium reprehenderit ex nam suscipit omnis
-                                obcaecati praesentium sit pariatur! Lorem ipsum dolor sit amet
-                                consectetur adipisicing elit. Distinctio molestias, in, repellat
-                                natus doloremque eius nisi explicabo hic commodi laboriosam
-                                accusantium reprehenderit ex nam suscipit omnis obcaecati
-                                praesentium sit pariatur! Lorem ipsum dolor sit amet consectetur
-                            </p>
+                            <p className="mb-4">{t('app.description')}</p>
                             <Link href="/flashcards" legacyBehavior>
                                 <a className={styles.button}>{t('header.nav.flashcards')}</a>
                             </Link>

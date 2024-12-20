@@ -1,5 +1,6 @@
 {
   "app.title": "Flashcard App",
+  "app.description": "Welkom bij Flashcard App! Deze applicatie helpt je bij het maken, beheren en bestuderen van flashcards om je leerervaring te verbeteren. Of je nu een student, leraar of levenslange leerling bent, onze app biedt de tools die je nodig hebt om te slagen.",
   "general.error": "Er is een fout opgetreden. Probeer het later opnieuw.",
   "general.unauthorized": "Ongeautoriseerde toegang. Log alstublieft in.",
   "login": {
@@ -61,10 +62,14 @@
     "create.answer": "Antwoord:",
     "edit.title": "Flashcard Bewerken",
     "edit.button": "Bewerken",
+    "edit.error": "Flashcard bijwerken mislukt",
     "delete.button": "Verwijderen",
     "delete.error": "Flashcard verwijderen mislukt",
     "view.details": "Bekijk Details",
     "loading": "Flashcards laden...",
+    "notFound": "Flashcard niet gevonden",
+    "invalidId": "Ongeldige flashcard-ID.",
+    "fetchError": "Er is een fout opgetreden bij het ophalen van flashcard.",
     "error": "Er is een fout opgetreden bij het ophalen van flashcards."
   },
   "categories": {
