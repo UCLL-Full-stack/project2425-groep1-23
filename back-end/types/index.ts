@@ -18,7 +18,7 @@ type AuthenticationResponse = {
 };
 
 export interface UpdateUserRoleInput {
-  role: Role; // Assuming Role is already defined and imported
+  role: Role;
 }
 
 export { UserInput, AuthenticationResponse };
