@@ -34,3 +34,15 @@ a {
 h1, h2, h3, h4, h5, h6 {
   color: var(--text-color);
 }
+
+footer{
+  text-align:center;
+}
+
+
+#login_information_div h2{
+  text-align:center;
+}
+#login_information_div table {
+  margin:auto;
+}

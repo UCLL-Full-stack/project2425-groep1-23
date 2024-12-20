@@ -33,7 +33,7 @@ const Login: React.FC = () => {
                 <main className="flex-grow flex items-center justify-center">
                     <div>
                         <LoginForm />
-                        <div className="mt-8">
+                        <div className="mt-8" id="login_information_div">
                             <h2 className="text-center text-lg font-bold mb-4">Login Information</h2>
                             <table className="table-auto border-collapse border border-gray-300 mx-auto">
                                 <thead>
@@ -56,9 +56,6 @@ const Login: React.FC = () => {
                         </div>
                     </div>
                 </main>
-                <footer className={styles.footer}>
-                    <p>© 2024 FlashcardApp. All rights reserved.</p>
-                </footer>
             </div>
         </>
     );

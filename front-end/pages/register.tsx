@@ -15,9 +15,6 @@ const Register: React.FC = () => {
                 <main className="flex-grow flex items-center justify-center">
                     <RegisterForm />
                 </main>
-                <footer className={styles.footer}>
-                    <p>© 2023 FlashcardApp. All rights reserved.</p>
-                </footer>
             </div>
         </>
     );
