@@ -36,9 +36,6 @@ const Home: NextPage = () => {
                     />
                 </div>
             </main>
-            <footer className={styles.footer}>
-                <p>{t('footer.copyright')}</p>
-            </footer>
         </>
     );
 };
