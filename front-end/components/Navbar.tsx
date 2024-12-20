@@ -22,7 +22,7 @@ const Navbar: FC = () => {
 
     // Function to load user from sessionStorage
     const loadUser = () => {
-        if (typeof window !== 'undefined') {
+        if (typeof window !== 'undefined') { 
             // Ensure window is available
             const storedUser = sessionStorage.getItem('loggedInUser');
             if (storedUser) {
