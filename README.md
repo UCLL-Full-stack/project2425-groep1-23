@@ -1,10 +1,8 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/twPj_hbU)
-
 # FlashcardsApp
 
 ## Overview
 
-Provide a brief overview of your project here.
+FlashcardsApp is a web application that helps users create, manage, and study flashcards to enhance their learning experience. Whether you are a student, teacher, or lifelong learner, our app provides the tools you need to succeed.
 
 ## Prerequisites
 
@@ -35,7 +33,9 @@ Create the `.env` file in the `back-end` directory with the following content:
 
 ```sh
 # .env (back-end)
-DATABASE_URL=your_database_url
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/flashcarddb?schema=public"
+JWT_SECRET="2492067e5cebc3914bc9f7d502472b6d8bbaeb994441409ce7f7b48898e6e44f341b67316ea7ae916c206dc91b751f9157aa6cc9779f908e52660e42fa5013f1"
+JWT_EXPIRES_HOURS=8
 ```
 
 Create the `.env.local` file in the `front-end` directory with the following content:
@@ -84,6 +84,14 @@ npm run dev
 Open your browser and navigate to [http://localhost:3000](http://localhost:3000) to access the frontend application.
 
 ## Additional Information
+
+### Backend
+
+The backend server is built with Node.js and Express. It uses Prisma as the ORM to interact with the database. The backend server runs on port 4000 by default.
+
+### Frontend
+
+The frontend application is built with Next.js and React. It uses next-i18next for internationalization and js-cookie for handling cookies.
 
 ## Authors
 
