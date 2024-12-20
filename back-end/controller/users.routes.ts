@@ -1,10 +1,13 @@
 import express, { NextFunction, Request, Response } from 'express';
-import { User as PrismaUser } from '@prisma/client';
+import { User as PrismaUser} from '@prisma/client';
+import { Role } from '../model/Role';
 import * as userService from '../service/userService';
 import { UserInput } from '../types';
 // import { validateUserCreation, validateUserUpdate } from '../middleware/validation/usersValidation';
 // import { validateRequest } from '../middleware/validateRequest';
 import { param } from 'express-validator';
+import { body, validationResult } from 'express-validator';
+
 
 const usersRouter = express.Router();
 
@@ -237,6 +240,76 @@ usersRouter.put('/:id',
     } catch (error) {
       next(error);
     }
+  }
+);
+
+/**
+ * @swagger
+ * /users/{id}/role:
+ *   put:
+ *     summary: Update a user's role
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Numeric ID of the user to update.
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       description: New role for the user.
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - role
+ *             properties:
+ *               role:
+ *                 type: string
+ *                 enum: ['USER', 'ADMIN', 'STUDENT', 'TEACHER']
+ *             example:
+ *               role: "ADMIN"
+ *     responses:
+ *       200:
+ *         description: User role updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Invalid input.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Failed to update user role.
+ */
+usersRouter.put(
+  '/:id/role',
+  [
+      param('id').isInt().withMessage('ID must be an integer'),
+      body('role')
+          .isIn(['USER', 'ADMIN', 'STUDENT', 'TEACHER'])
+          .withMessage('Role must be one of USER, ADMIN, STUDENT, TEACHER'),
+  ],
+  async (req: Request, res: Response, next: NextFunction) => {
+      const errors = require('express-validator').validationResult(req);
+      if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+      }
+
+      const id = parseInt(req.params.id);
+      const { role } = req.body;
+
+      try {
+          const updatedUser = await userService.updateUserRole(id, role as Role);
+          res.json(updatedUser);
+      } catch (error) {
+          next(error);
+      }
   }
 );
 
