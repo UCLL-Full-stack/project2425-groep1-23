@@ -53,6 +53,14 @@ const LoginForm: React.FC = () => {
 
             const data = await response.json();
             if (data.token) {
+                sessionStorage.setItem('loggedInUser',
+                JSON.stringify({
+                    token: data.token,
+                    email: data.email,
+                    role: data.role,
+                })
+                );
+
                 setSuccessMessage('Login successful! Redirecting...');
                 setTimeout(() => {
                     Cookies.set('token', data.token, { expires: 1 });
@@ -60,7 +68,11 @@ const LoginForm: React.FC = () => {
                 }, 2000);
             }
         } catch (error) {
-            setGeneralError(error.message || 'An unexpected error occurred. Please try again.');
+            if (error instanceof Error) {
+                setGeneralError(error.message || 'An unexpected error occurred. Please try again.');
+            } else {
+                setGeneralError('An unexpected error occurred. Please try again.');
+            }
         }
     };
 

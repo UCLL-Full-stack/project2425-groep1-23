@@ -3,8 +3,9 @@ import Cookies from 'js-cookie';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000';
 
-export async function getFlashcards(): Promise<Flashcard[]> {
-  const token = Cookies.get('token');
+export async function getFlashcards(token:string): Promise<Flashcard[]> {
+  const loggedInUser = sessionStorage.getItem("loggedInUser");
+  // const token = loggedInUser ? JSON.parse(loggedInUser)?.token : null;
   const response = await fetch(`${API_BASE_URL}/flashcards`, {
     headers: {
       'Content-Type': 'application/json',
@@ -19,8 +20,8 @@ export async function getFlashcards(): Promise<Flashcard[]> {
   return response.json();
 }
 
-export async function getFlashcardById(id: number): Promise<Flashcard> {
-  const token = Cookies.get('token');
+export async function getFlashcardById(id: number, token: string): Promise<Flashcard> {
+  // const token = Cookies.get('token');
   const response = await fetch(`${API_BASE_URL}/flashcards/${id}`, {
     headers: {
       'Content-Type': 'application/json',

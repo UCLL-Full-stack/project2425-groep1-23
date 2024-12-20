@@ -3,35 +3,58 @@ import { useEffect, useState } from 'react';
 import { getFlashcardById } from '../../services/flashcardService';
 import { Flashcard } from '../../types';
 import FlipCard from '../../components/FlipCard';
-import styles from '../../styles/FlashCardDetail.module.css'
+
+import styles from '../../styles/FlashCardDetail.module.css';
 
 const FlashcardDetailPage = () => {
   const router = useRouter();
   const { id } = router.query;
 
   const [flashcard, setFlashcard] = useState<Flashcard | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (id && !isNaN(Number(id))) {
-      getFlashcardById(Number(id))
-        .then((data) => setFlashcard(data))
-        .catch((error) => {
-          console.error('Error fetching flashcard:', error);
-          setError('Failed to load flashcard.');
-        });
-    } else {
-      console.warn('Invalid flashcard ID:', id);
-      setError('Invalid flashcard ID.');
+    const fetchFlashcard = async () => {
+      try {
+        const loggedInUser = sessionStorage.getItem('loggedInUser');
+        if (!loggedInUser) {
+          router.push('/login');
+          return;
+        }
+
+        const parsedId = Number(id);
+        if (!id || isNaN(parsedId)) {
+          setError('Invalid flashcard ID.');
+          return;
+        }
+
+        const { token } = JSON.parse(loggedInUser);
+
+        const flashcard = await getFlashcardById(parsedId, token);
+        setFlashcard(flashcard);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred while fetching flashcard.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchFlashcard();
     }
-  }, [id]);
+  }, [id, router]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   if (error) {
     return <div>{error}</div>;
   }
 
   if (!flashcard) {
-    return <div>Loading...</div>;
+    return <div>Flashcard not found.</div>;
   }
 
   return (
