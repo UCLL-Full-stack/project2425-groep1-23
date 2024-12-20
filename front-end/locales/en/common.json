@@ -1,0 +1,87 @@
+{
+  "app.title": "Flashcard App",
+  "app.description": "Welcome to Flashcard App! This application helps you create, manage, and study flashcards to enhance your learning experience. Whether you are a student, teacher, or lifelong learner, our app provides the tools you need to succeed.",
+  "general.error": "An error has occurred. Please try again later.",
+  "general.unauthorized": "Unauthorized access. Please log in.",
+  "login": {
+    "title": "Login",
+    "button": "Login",
+    "success": "Login successful. Redirecting to homepage...",
+    "validate": {
+      "email": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "password": "Password is required"
+    },
+    "label": {
+      "email": "Email:",
+      "password": "Password:"
+    },
+    "registerLink": "Register",
+    "error": "Login failed. Please try again.",
+    "information": {
+      "title": "Login Information",
+      "username": "Username",
+      "password": "Password",
+      "role": "Role"
+    }
+  },
+  "register": {
+    "title": "Register",
+    "button": "Register",
+    "success": "Registration successful. Redirecting to homepage...",
+    "validate": {
+      "name": "Name is required",
+      "password": "Password is required",
+      "confirmPassword": "Confirm Password is required"
+    },
+    "label": {
+      "username": "Username:",
+      "password": "Password:",
+      "confirmPassword": "Confirm Password:"
+    }
+  },
+  "lecturers": {
+    "title": "Lecturers",
+    "coursesTaughtBy": "Courses taught by {{name}}"
+  },
+  "header": {
+    "welcome": "Welcome",
+    "nav": {
+      "home": "Home",
+      "flashcards": "Flashcards",
+      "create": "Create",
+      "login": "Login",
+      "logout": "Logout"
+    }
+  },
+  "flashcards": {
+    "title": "Flashcards",
+    "create.title": "Create New Flashcard",
+    "create.button": "Create Flashcard",
+    "create.question": "Question:",
+    "create.answer": "Answer:",
+    "edit.title": "Edit Flashcard",
+    "edit.button": "Edit",
+    "edit.error": "Failed to update flashcard",
+    "delete.button": "Delete",
+    "delete.error": "Failed to delete flashcard",
+    "view.details": "View Details",
+    "loading": "Loading flashcards...",
+    "notFound": "Flashcard not found",
+    "invalidId": "Invalid flashcard ID.",
+    "fetchError": "An error occurred while fetching flashcard.",
+    "error": "An error occurred while fetching flashcards."
+  },
+  "categories": {
+    "create.title": "Create New Category",
+    "create.button": "Create Category",
+    "name.label": "Category Name:",
+    "description.label": "Description:",
+    "create.success": "Category created successfully!",
+    "create.error": "Failed to create category. Please try again.",
+    "create.select": "Select a Category"
+  },
+  "footer": {
+    "copyright": "© 2024 FlashcardApp. All rights reserved."
+  }
+}

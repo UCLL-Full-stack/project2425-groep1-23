@@ -1,0 +1,87 @@
+{
+  "app.title": "Flashcard App",
+  "app.description": "Welkom bij Flashcard App! Deze applicatie helpt je bij het maken, beheren en bestuderen van flashcards om je leerervaring te verbeteren. Of je nu een student, leraar of levenslange leerling bent, onze app biedt de tools die je nodig hebt om te slagen.",
+  "general.error": "Er is een fout opgetreden. Probeer het later opnieuw.",
+  "general.unauthorized": "Ongeautoriseerde toegang. Log alstublieft in.",
+  "login": {
+    "title": "Inloggen",
+    "button": "Inloggen",
+    "success": "Inloggen succesvol. Doorverwijzen naar de startpagina...",
+    "validate": {
+      "email": "E-mail is verplicht",
+      "emailInvalid": "Voer een geldig e-mailadres in",
+      "password": "Wachtwoord is verplicht"
+    },
+    "label": {
+      "email": "E-mail:",
+      "password": "Wachtwoord:"
+    },
+    "registerLink": "Registreren",
+    "error": "Inloggen mislukt. Probeer het opnieuw.",
+    "information": {
+      "title": "Login Informatie",
+      "username": "Gebruikersnaam",
+      "password": "Wachtwoord",
+      "role": "Rol"
+    }
+  },
+  "register": {
+    "title": "Registreren",
+    "button": "Registreren",
+    "success": "Registratie succesvol. Doorverwijzen naar de startpagina...",
+    "validate": {
+      "name": "Naam is verplicht",
+      "password": "Wachtwoord is verplicht",
+      "confirmPassword": "Bevestig Wachtwoord is verplicht"
+    },
+    "label": {
+      "username": "Gebruikersnaam:",
+      "password": "Wachtwoord:",
+      "confirmPassword": "Bevestig Wachtwoord:"
+    }
+  },
+  "lecturers": {
+    "title": "Docenten",
+    "coursesTaughtBy": "Cursussen gegeven door {{name}}"
+  },
+  "header": {
+    "welcome": "Welkom",
+    "nav": {
+      "home": "Startpagina",
+      "flashcards": "Flashcards",
+      "create": "Aanmaken",
+      "login": "Inloggen",
+      "logout": "Uitloggen"
+    }
+  },
+  "flashcards": {
+    "title": "Flashcards",
+    "create.title": "Nieuwe Flashcard Aanmaken",
+    "create.button": "Flashcard Aanmaken",
+    "create.question": "Vraag:",
+    "create.answer": "Antwoord:",
+    "edit.title": "Flashcard Bewerken",
+    "edit.button": "Bewerken",
+    "edit.error": "Flashcard bijwerken mislukt",
+    "delete.button": "Verwijderen",
+    "delete.error": "Flashcard verwijderen mislukt",
+    "view.details": "Bekijk Details",
+    "loading": "Flashcards laden...",
+    "notFound": "Flashcard niet gevonden",
+    "invalidId": "Ongeldige flashcard-ID.",
+    "fetchError": "Er is een fout opgetreden bij het ophalen van flashcard.",
+    "error": "Er is een fout opgetreden bij het ophalen van flashcards."
+  },
+  "categories": {
+    "create.title": "Nieuwe Categorie Aanmaken",
+    "create.button": "Categorie Aanmaken",
+    "name.label": "Categorienaam:",
+    "description.label": "Beschrijving:",
+    "create.success": "Categorie succesvol aangemaakt!",
+    "create.error": "Categorie aanmaken mislukt. Probeer het opnieuw.",
+    "create.select": "Selecteer een Categorie"
+  },
+  "footer": {
+    "copyright": "© 2024 FlashcardApp. Alle rechten voorbehouden."
+  }
+}

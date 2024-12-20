@@ -64,6 +64,7 @@ const LoginForm: React.FC = () => {
                 setTimeout(() => {
                     Cookies.set('token', data.token, { expires: 1 });
                     router.push('/flashcards'); // Redirect to flashcards page
+                    window.location.reload();
                 }, 2000);
             }
         } catch (error) {
