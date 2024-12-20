@@ -1,5 +1,4 @@
 import { FC, useState } from 'react';
-import { useTranslation } from 'next-i18next';
 import styles from '../styles/FlipCard.module.css';
 
 interface FlipCardProps {
@@ -8,7 +7,6 @@ interface FlipCardProps {
 }
 
 const FlipCard: FC<FlipCardProps> = ({ question, answer }) => {
-    const { t } = useTranslation('common');
     const [isFlipped, setIsFlipped] = useState(false);
 
     const handleCardClick = () => {
@@ -23,13 +21,13 @@ const FlipCard: FC<FlipCardProps> = ({ question, answer }) => {
             >
                 <div className={`${styles.cardFace} ${styles.cardFront}`}>
                     <div className={styles.content}>
-                        <h2>{t('flashcards.question')}</h2>
+                        <h2>Question</h2>
                         <p>{question}</p>
                     </div>
                 </div>
                 <div className={`${styles.cardFace} ${styles.cardBack}`}>
                     <div className={styles.content}>
-                        <h2>{t('flashcards.answer')}</h2>
+                        <h2>Answer</h2>
                         <p>{answer}</p>
                     </div>
                 </div>

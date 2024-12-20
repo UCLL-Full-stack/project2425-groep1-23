@@ -51,7 +51,8 @@
       "flashcards": "Flashcards",
       "create": "Aanmaken",
       "login": "Inloggen",
-      "logout": "Uitloggen"
+      "logout": "Uitloggen",
+      "register": "Registireer"
     }
   },
   "flashcards": {

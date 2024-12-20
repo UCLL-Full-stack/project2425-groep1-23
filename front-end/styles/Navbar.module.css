@@ -43,3 +43,15 @@
 .languageSwitcher:focus {
   outline: none;
 }
+.navLinkButton {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.2rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.navLinkButton:hover {
+  text-decoration: underline;
+}

@@ -51,7 +51,8 @@
       "flashcards": "Flashcards",
       "create": "Create",
       "login": "Login",
-      "logout": "Logout"
+      "logout": "Logout",
+      "register": "Register"
     }
   },
   "flashcards": {
