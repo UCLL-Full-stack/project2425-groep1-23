@@ -31,3 +31,15 @@
 .navLink:hover {
   text-decoration: underline;
 }
+
+.languageSwitcher {
+  background-color: var(--navbar-color);
+  color: var(--text-color);
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.languageSwitcher:focus {
+  outline: none;
+}

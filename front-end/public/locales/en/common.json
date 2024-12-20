@@ -1,0 +1,75 @@
+{
+  "app.title": "Flashcard App",
+  "general.error": "An error has occurred. Please try again later.",
+  "general.unauthorized": "Unauthorized access. Please log in.",
+  "login": {
+    "title": "Login",
+    "button": "Login",
+    "success": "Login successful. Redirecting to homepage...",
+    "validate": {
+      "name": "Name is required",
+      "password": "Password is required"
+    },
+    "label": {
+      "username": "Username:",
+      "password": "Password:"
+    },
+    "information": {
+      "title": "Login Information",
+      "username": "Username",
+      "password": "Password",
+      "role": "Role"
+    }
+  },
+  "register": {
+    "title": "Register",
+    "button": "Register",
+    "success": "Registration successful. Redirecting to homepage...",
+    "validate": {
+      "name": "Name is required",
+      "password": "Password is required",
+      "confirmPassword": "Confirm Password is required"
+    },
+    "label": {
+      "username": "Username:",
+      "password": "Password:",
+      "confirmPassword": "Confirm Password:"
+    }
+  },
+  "lecturers": {
+    "title": "Lecturers",
+    "coursesTaughtBy": "Courses taught by {{name}}"
+  },
+  "header": {
+    "welcome": "Welcome",
+    "nav": {
+      "home": "Home",
+      "flashcards": "Flashcards",
+      "create": "Create",
+      "login": "Login",
+      "logout": "Logout"
+    }
+  },
+  "flashcards": {
+    "create.title": "Create New Flashcard",
+    "create.button": "Create Flashcard",
+    "edit.title": "Edit Flashcard",
+    "edit.button": "Update Flashcard",
+    "delete.button": "Delete",
+    "view.details": "View Details",
+    "loading": "Loading flashcards...",
+    "error": "An error occurred while fetching flashcards."
+  },
+  "categories": {
+    "create.title": "Create New Category",
+    "create.button": "Create Category",
+    "name.label": "Category Name:",
+    "description.label": "Description:",
+    "create.success": "Category created successfully!",
+    "create.error": "Failed to create category. Please try again.",
+    "create.select": "Select a Category"
+  },
+  "footer": {
+    "copyright": "© 2024 FlashcardApp. All rights reserved."
+  }
+}

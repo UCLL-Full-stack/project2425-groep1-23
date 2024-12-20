@@ -1,4 +1,5 @@
 import { FC, useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { useTranslation } from 'next-i18next';
 import { FlashcardInput, Category } from '../types';
 import { getCategories } from '../services/categoryService';
 import styles from '../styles/FlashcardForm.module.css';
@@ -9,6 +10,7 @@ interface FlashcardFormProps {
 }
 
 const FlashcardForm: FC<FlashcardFormProps> = ({ onSubmit, initialData }) => {
+    const { t } = useTranslation('common');
     const [question, setQuestion] = useState(initialData?.question || '');
     const [answer, setAnswer] = useState(initialData?.answer || '');
     const [categoryId, setCategoryId] = useState<number | undefined>(initialData?.categoryId);
@@ -26,17 +28,16 @@ const FlashcardForm: FC<FlashcardFormProps> = ({ onSubmit, initialData }) => {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         if (!categoryId) {
-            setError('Please select a category.');
+            setError(t('categories.create.error'));
             return;
         }
-        setError(null);
         onSubmit({ question, answer, categoryId });
     };
 
     return (
         <form onSubmit={handleSubmit} className={styles.formContainer}>
             <div className={styles.formGroup}>
-                <label className={styles.label}>Question:</label>
+                <label className={styles.label}>{t('flashcards.create.question')}</label>
                 <input
                     type="text"
                     className={styles.input}
@@ -46,7 +47,7 @@ const FlashcardForm: FC<FlashcardFormProps> = ({ onSubmit, initialData }) => {
                 />
             </div>
             <div className={styles.formGroup}>
-                <label className={styles.label}>Answer:</label>
+                <label className={styles.label}>{t('flashcards.create.answer')}</label>
                 <input
                     type="text"
                     className={styles.input}
@@ -56,7 +57,7 @@ const FlashcardForm: FC<FlashcardFormProps> = ({ onSubmit, initialData }) => {
                 />
             </div>
             <div className={styles.formGroup}>
-                <label className={styles.label}>Category:</label>
+                <label className={styles.label}>{t('categories.name.label')}</label>
                 <select
                     className={styles.select}
                     value={categoryId ?? ''}
@@ -66,7 +67,7 @@ const FlashcardForm: FC<FlashcardFormProps> = ({ onSubmit, initialData }) => {
                     }}
                     required
                 >
-                    <option value="">Select a Category</option>
+                    <option value="">{t('categories.create.select')}</option>
                     {categories.map((category) => (
                         <option key={category.id} value={category.id}>
                             {category.name}
@@ -76,7 +77,7 @@ const FlashcardForm: FC<FlashcardFormProps> = ({ onSubmit, initialData }) => {
             </div>
             {error && <div className={styles.error}>{error}</div>}
             <button type="submit" className={styles.button}>
-                {initialData ? 'Update Flashcard' : 'Create Flashcard'}
+                {initialData ? t('flashcards.edit.button') : t('flashcards.create.button')}
             </button>
         </form>
     );

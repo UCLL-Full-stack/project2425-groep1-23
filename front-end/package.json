@@ -13,8 +13,13 @@
     "js-cookie": "^3.0.5",
     "my-app": "file:",
     "next": "15.0.2",
-    "react": "19.0.0-rc-02c0e824-20241028",
-    "react-dom": "19.0.0-rc-02c0e824-20241028"
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "swr": "^2.2.0",
+    "use-interval": "^1.4.0",
+    "i18next": "^23.7.6",
+    "next-i18next": "^15.0.0",
+    "react-i18next": "^13.4.1"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",

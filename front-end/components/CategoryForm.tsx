@@ -1,5 +1,5 @@
 import { FC, useState, ChangeEvent, FormEvent } from 'react';
-import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 import { createCategory } from '../services/categoryService';
 import { CategoryInput } from '../types';
 import styles from '../styles/FlashcardForm.module.css';
@@ -9,11 +9,11 @@ interface CategoryFormProps {
 }
 
 const CategoryForm: FC<CategoryFormProps> = ({ onCategoryCreated }) => {
+    const { t } = useTranslation('common');
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
-    const router = useRouter();
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -26,20 +26,17 @@ const CategoryForm: FC<CategoryFormProps> = ({ onCategoryCreated }) => {
             await createCategory(newCategory);
             setName('');
             setDescription('');
-            setSuccessMessage('Category created successfully!');
+            setSuccessMessage(t('categories.create.success'));
             onCategoryCreated();
-            setTimeout(() => {
-                router.reload();
-            }, 2000); // Refresh the page after 2 seconds
         } catch (error) {
-            setError('Failed to create category. Please try again.');
+            setError(t('categories.create.error'));
         }
     };
 
     return (
         <form onSubmit={handleSubmit} className={styles.formContainer}>
             <div className={styles.formGroup}>
-                <label className={styles.label}>Category Name:</label>
+                <label className={styles.label}>{t('categories.name.label')}</label>
                 <input
                     type="text"
                     className={styles.input}
@@ -49,7 +46,7 @@ const CategoryForm: FC<CategoryFormProps> = ({ onCategoryCreated }) => {
                 />
             </div>
             <div className={styles.formGroup}>
-                <label className={styles.label}>Description:</label>
+                <label className={styles.label}>{t('categories.description.label')}</label>
                 <input
                     type="text"
                     className={styles.input}
@@ -60,7 +57,7 @@ const CategoryForm: FC<CategoryFormProps> = ({ onCategoryCreated }) => {
             {error && <div className={styles.error}>{error}</div>}
             {successMessage && <div className={styles.success}>{successMessage}</div>}
             <button type="submit" className={styles.button}>
-                Create Category
+                {t('categories.create.button')}
             </button>
         </form>
     );

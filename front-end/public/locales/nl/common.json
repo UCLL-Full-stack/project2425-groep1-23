@@ -1,0 +1,75 @@
+{
+  "app.title": "Flashcard App",
+  "general.error": "Er is een fout opgetreden. Probeer het later opnieuw.",
+  "general.unauthorized": "Ongeautoriseerde toegang. Log alstublieft in.",
+  "login": {
+    "title": "Inloggen",
+    "button": "Inloggen",
+    "success": "Inloggen succesvol. Doorverwijzen naar de startpagina...",
+    "validate": {
+      "name": "Naam is verplicht",
+      "password": "Wachtwoord is verplicht"
+    },
+    "label": {
+      "username": "Gebruikersnaam:",
+      "password": "Wachtwoord:"
+    },
+    "information": {
+      "title": "Login Informatie",
+      "username": "Gebruikersnaam",
+      "password": "Wachtwoord",
+      "role": "Rol"
+    }
+  },
+  "register": {
+    "title": "Registreren",
+    "button": "Registreren",
+    "success": "Registratie succesvol. Doorverwijzen naar de startpagina...",
+    "validate": {
+      "name": "Naam is verplicht",
+      "password": "Wachtwoord is verplicht",
+      "confirmPassword": "Bevestig Wachtwoord is verplicht"
+    },
+    "label": {
+      "username": "Gebruikersnaam:",
+      "password": "Wachtwoord:",
+      "confirmPassword": "Bevestig Wachtwoord:"
+    }
+  },
+  "lecturers": {
+    "title": "Docenten",
+    "coursesTaughtBy": "Cursussen gegeven door {{name}}"
+  },
+  "header": {
+    "welcome": "Welkom",
+    "nav": {
+      "home": "Startpagina",
+      "flashcards": "Flashcards",
+      "create": "Aanmaken",
+      "login": "Inloggen",
+      "logout": "Uitloggen"
+    }
+  },
+  "flashcards": {
+    "create.title": "Nieuwe Flashcard Aanmaken",
+    "create.button": "Flashcard Aanmaken",
+    "edit.title": "Flashcard Bewerken",
+    "edit.button": "Flashcard Bijwerken",
+    "delete.button": "Verwijderen",
+    "view.details": "Bekijk Details",
+    "loading": "Flashcards laden...",
+    "error": "Er is een fout opgetreden bij het ophalen van flashcards."
+  },
+  "categories": {
+    "create.title": "Nieuwe Categorie Aanmaken",
+    "create.button": "Categorie Aanmaken",
+    "name.label": "Categorienaam:",
+    "description.label": "Beschrijving:",
+    "create.success": "Categorie succesvol aangemaakt!",
+    "create.error": "Categorie aanmaken mislukt. Probeer het opnieuw.",
+    "create.select": "Selecteer een Categorie"
+  },
+  "footer": {
+    "copyright": "© 2024 FlashcardApp. Alle rechten voorbehouden."
+  }
+}

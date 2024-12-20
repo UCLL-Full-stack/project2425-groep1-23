@@ -3,8 +3,11 @@ import { useRouter } from 'next/router';
 import FlashcardList from '../../components/FlashcardList';
 import { getFlashcards } from '../../services/flashcardService';
 import { Flashcard } from '../../types';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const FlashcardsPage: React.FC = () => {
+    const { t } = useTranslation('common');
     const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -24,7 +27,11 @@ const FlashcardsPage: React.FC = () => {
                 const flashcards = await getFlashcards(token);
                 setFlashcards(flashcards);
             } catch (err) {
-                setError(err instanceof Error ? err.message : 'An error occurred while fetching flashcards.');
+                setError(
+                    err instanceof Error
+                        ? err.message
+                        : 'An error occurred while fetching flashcards.'
+                );
             } finally {
                 setLoading(false);
             }
@@ -49,4 +56,9 @@ const FlashcardsPage: React.FC = () => {
     );
 };
 
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+    },
+});
 export default FlashcardsPage;
