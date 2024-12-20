@@ -1,8 +1,7 @@
-// front-end/pages/flashcards/create.tsx
-
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import FlashcardForm from '../../components/FlashcardForm';
+import CategoryForm from '../../components/CategoryForm';
 import { createFlashcard } from '../../services/flashcardService';
 import { FlashcardInput } from '../../types';
 
@@ -19,10 +18,17 @@ const CreateFlashcardPage: NextPage = () => {
         }
     };
 
+    const handleCategoryCreated = () => {
+        // Optionally, refresh categories or show a success message
+        console.log('Category created successfully');
+    };
+
     return (
         <div>
             <h1>Create New Flashcard</h1>
             <FlashcardForm onSubmit={handleCreateFlashcard} />
+            <h2>Create New Category</h2>
+            <CategoryForm onCategoryCreated={handleCategoryCreated} />
         </div>
     );
 };

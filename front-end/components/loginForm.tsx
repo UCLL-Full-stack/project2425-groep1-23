@@ -53,18 +53,19 @@ const LoginForm: React.FC = () => {
 
             const data = await response.json();
             if (data.token) {
-                sessionStorage.setItem('loggedInUser',
-                JSON.stringify({
-                    token: data.token,
-                    email: data.email,
-                    role: data.role,
-                })
+                sessionStorage.setItem(
+                    'loggedInUser',
+                    JSON.stringify({
+                        token: data.token,
+                        email: data.email,
+                        role: data.role,
+                    })
                 );
 
                 setSuccessMessage('Login successful! Redirecting...');
                 setTimeout(() => {
                     Cookies.set('token', data.token, { expires: 1 });
-                    router.push('/profile');
+                    router.push('/flashcards');
                 }, 2000);
             }
         } catch (error) {

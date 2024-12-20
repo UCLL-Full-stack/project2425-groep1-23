@@ -1,7 +1,7 @@
 import { FC, useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { FlashcardInput, Category } from '../types';
 import { getCategories } from '../services/categoryService';
-import styles from './FlashcardForm.module.css';
+import styles from '../styles/FlashcardForm.module.css';
 
 interface FlashcardFormProps {
     onSubmit: (data: FlashcardInput) => void;
