@@ -1,80 +1,79 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { GetServerSideProps, NextPage } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { getFlashcardById } from '../../services/flashcardService';
 import { Flashcard } from '../../types';
 import FlipCard from '../../components/FlipCard';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { NextPage, GetStaticProps } from 'next';
 import styles from '../../styles/FlashCardDetail.module.css';
 
-const FlashcardDetailPage = () => {
-    const router = useRouter();
-    const { id } = router.query;
+interface FlashcardDetailProps {
+  flashcard: Flashcard | null;
+  error?: string;
+}
 
-    const [flashcard, setFlashcard] = useState<Flashcard | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+const FlashcardDetailPage: NextPage<FlashcardDetailProps> = ({ flashcard, error }) => {
+  if (error) {
+    return <div>{error}</div>;
+  }
 
-    useEffect(() => {
-        const fetchFlashcard = async () => {
-            try {
-                const loggedInUser = sessionStorage.getItem('loggedInUser');
-                if (!loggedInUser) {
-                    router.push('/login');
-                    return;
-                }
+  if (!flashcard) {
+    return <div>Flashcard not found.</div>;
+  }
 
-                const parsedId = Number(id);
-                if (!id || isNaN(parsedId)) {
-                    setError('Invalid flashcard ID.');
-                    return;
-                }
-
-                const { token } = JSON.parse(loggedInUser);
-
-                const flashcard = await getFlashcardById(parsedId, token);
-                setFlashcard(flashcard);
-            } catch (err) {
-                setError(
-                    err instanceof Error
-                        ? err.message
-                        : 'An error occurred while fetching flashcard.'
-                );
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (id) {
-            fetchFlashcard();
-        }
-    }, [id, router]);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>{error}</div>;
-    }
-
-    if (!flashcard) {
-        return <div>Flashcard not found.</div>;
-    }
-
-    return (
-        <div className={styles.container}>
-            <h1>Flashcard Detail</h1>
-            <FlipCard question={flashcard.question} answer={flashcard.answer} />
-        </div>
-    );
+  return (
+    <div className={styles.container}>
+      <h1>Flashcard Detail</h1>
+      <FlipCard question={flashcard.question} answer={flashcard.answer} />
+    </div>
+  );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-    props: {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { id } = context.params as { id: string };
+  const { locale } = context;
+  
+  const token = (() => {
+    const cookieHeader = context.req.headers.cookie || '';
+    const match = cookieHeader.match(/token=([^;]+)/);
+    return match ? match[1] : null;
+  })();
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  const parsedId = Number(id);
+  if (isNaN(parsedId)) {
+    return {
+      props: {
+        flashcard: null,
+        error: 'Invalid flashcard ID.',
         ...(await serverSideTranslations(locale ?? 'en', ['common'])),
-    },
-});
+      },
+    };
+  }
+
+  try {
+    const flashcard = await getFlashcardById(parsedId, token);
+    return {
+      props: {
+        flashcard,
+        ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+      },
+    };
+  } catch (err: any) {
+    return {
+      props: {
+        flashcard: null,
+        error: err.message || 'An error occurred while fetching flashcard.',
+        ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+      },
+    };
+  }
+};
 
 export default FlashcardDetailPage;
