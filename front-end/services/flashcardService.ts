@@ -58,3 +58,16 @@ export async function updateFlashcard(id: number, data: FlashcardInput): Promise
   }
   return response.json();
 }
+
+export async function deleteFlashcard(id: number): Promise<void> {
+  const token = Cookies.get('token');
+  const response = await fetch(`${API_BASE_URL}/flashcards/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Failed to delete flashcard');
+  }
+}
