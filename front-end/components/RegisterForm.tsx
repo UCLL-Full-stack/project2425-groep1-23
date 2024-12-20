@@ -69,7 +69,7 @@ const RegisterForm: React.FC = () => {
                 setSuccessMessage(t('register.success'));
                 setTimeout(() => {
                     Cookies.set('token', data.token, { expires: 1 });
-                    router.push('/profile');
+                    router.push('/');
                 }, 2000);
             }
         } catch (error) {
