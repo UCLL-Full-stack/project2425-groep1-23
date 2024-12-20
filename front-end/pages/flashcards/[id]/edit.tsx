@@ -1,4 +1,4 @@
-import { NextPage } from 'next';
+import { NextPage, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import FlashcardForm from '../../../components/FlashcardForm';

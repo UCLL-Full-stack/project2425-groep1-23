@@ -5,22 +5,26 @@ export interface Flashcard {
     categoryId?: number;
     createdAt: string;
     updatedAt: string;
-  }
-  
-  export interface FlashcardInput {
+}
+
+export interface FlashcardInput {
     question: string;
     answer: string;
     categoryId?: number;
-  }
+}
 
-  export interface Category {
+export interface Category {
     id: number;
     name: string;
     description?: string;
-  }
+}
 
+export interface CategoryInput {
+    name: string;
+    description?: string;
+}
 
-  export type StatusMessage = {
+export type StatusMessage = {
     message: string;
     type: "error" | "success";
 };
@@ -28,10 +32,10 @@ export interface Flashcard {
 export type Role = 'USER' | 'ADMIN' | 'STUDENT' | 'TEACHER';
 
 export interface User {
-  id: number;
-  email: string;
-  password: string;
-  role: Role;
-  createdAt: string;
-  updatedAt: string;
+    id: number;
+    email: string;
+    password: string;
+    role: Role;
+    createdAt: string;
+    updatedAt: string;
 }

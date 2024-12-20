@@ -5,6 +5,7 @@ import { getFlashcards } from '../../services/flashcardService';
 import { Flashcard } from '../../types';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { NextPage, GetStaticProps } from 'next';
 
 const FlashcardsPage: React.FC = () => {
     const { t } = useTranslation('common');

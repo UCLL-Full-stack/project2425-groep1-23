@@ -5,7 +5,7 @@ import { Flashcard } from '../../types';
 import FlipCard from '../../components/FlipCard';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-
+import { NextPage, GetStaticProps } from 'next';
 import styles from '../../styles/FlashCardDetail.module.css';
 
 const FlashcardDetailPage = () => {

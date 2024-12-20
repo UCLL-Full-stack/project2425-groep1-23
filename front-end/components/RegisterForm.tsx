@@ -40,7 +40,7 @@ const RegisterForm: React.FC = () => {
 
         setErrors(validationErrors);
 
-        return JSON.stringify(validationErrors) === '{}';
+        return Object.keys(validationErrors).length === 0;
     };
 
     const formHandling = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -50,6 +50,7 @@ const RegisterForm: React.FC = () => {
         if (!validate()) {
             return;
         }
+
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/signup`, {
                 method: 'POST',
@@ -72,7 +73,11 @@ const RegisterForm: React.FC = () => {
                 }, 2000);
             }
         } catch (error) {
-            setGeneralError(error.message || t('register.error'));
+            if (error instanceof Error) {
+                setGeneralError(error.message || t('register.error'));
+            } else {
+                setGeneralError(t('register.error'));
+            }
         }
     };
 

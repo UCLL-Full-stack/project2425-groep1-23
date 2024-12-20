@@ -1,4 +1,4 @@
-import { NextPage, GetServerSideProps } from 'next';
+import { NextPage, GetServerSideProps, GetStaticProps } from 'next';
 import { useState } from 'react';
 import { getUsers, updateUserRole } from '../../services/userService';
 import { User, Role } from '../../types';

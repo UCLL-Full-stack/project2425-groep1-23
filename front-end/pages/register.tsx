@@ -3,6 +3,7 @@ import RegisterForm from '../components/RegisterForm';
 import styles from '../styles/Home.module.css';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { NextPage, GetStaticProps } from 'next';
 
 const Register: React.FC = () => {
     const { t } = useTranslation('common');

@@ -3,6 +3,7 @@ import LoginForm from '../components/loginForm';
 import styles from '../styles/Home.module.css';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { NextPage, GetStaticProps } from 'next';
 
 const Login: React.FC = () => {
     const { t } = useTranslation('common');
